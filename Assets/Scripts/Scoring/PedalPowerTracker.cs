@@ -1,4 +1,4 @@
-using Assets.PlayerScripts;
+﻿using Assets.PlayerScripts;
 using SideFX.Events;
 using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
@@ -9,6 +9,12 @@ using UnityEngine;
 namespace QWOPCycle.Scoring {
     public sealed class PedalPowerTracker : MonoBehaviour {
         [field: SerializeField] public float PedalPower { get; private set; }
+        public float MaxPedalPower => _maxPedalPower;
+
+        /// <summary>
+        /// Value from 0.0 - 1.0 representing how much power is being generated
+        /// </summary>
+        public float PedalPowerRatio => PedalPower / _maxPedalPower;
 
         [SerializeField] private float _pedalPowerIncrement = 1f;
         [SerializeField] private float _pedalPowerDecay = 0.1f;
