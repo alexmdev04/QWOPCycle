@@ -54,14 +54,14 @@ namespace QWOPCycle.Scoring {
         private void OnPedalLeft() {
             if (_gameIsRunning && _state is not PedalState.Left) {
                 _state = PedalState.Left;
-                PedalPower += 1;
+                PedalPower += _pedalPowerIncrement;
             }
         }
 
         private void OnPedalRight() {
             if (_gameIsRunning && _state is not PedalState.Right) {
                 _state = PedalState.Right;
-                PedalPower += 1;
+                PedalPower += _pedalPowerIncrement;
             }
         }
     }
