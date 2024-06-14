@@ -13,26 +13,26 @@ namespace QWOPCycle.Persistence {
     [Serializable]
     public sealed class GameSettings {
         private const string FILENAME = "settings.data";
-        private static readonly string FILEPATH = Path.Combine(Application.persistentDataPath, FILENAME);
 
 
         [field: SerializeField] public AudioSettings Audio { get; private set; }
 
 
         public static GameSettings Load() {
-            if (!File.Exists(FILEPATH)) {
+            string filepath = Path.Combine(Application.persistentDataPath, FILENAME);
+            if (!File.Exists(filepath)) {
                 var data = new GameSettings();
                 data.Save();
                 return data;
             }
 
-            string json = File.ReadAllText(FILEPATH);
+            string json = File.ReadAllText(filepath);
             return JsonUtility.FromJson<GameSettings>(json);
         }
 
         public void Save() {
             string json = JsonUtility.ToJson(this);
-            File.WriteAllText(FILEPATH, json);
+            File.WriteAllText(Path.Combine(Application.persistentDataPath, FILENAME), json);
         }
     }
 }
