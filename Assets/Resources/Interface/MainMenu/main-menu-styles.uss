@@ -1,0 +1,36 @@
+.menu-button {
+    background-color: rgb(40, 39, 38);
+    color: rgb(206, 205, 195);
+    font-size: 24px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin-top: 4px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    margin-left: 4px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.menu-button:hover {
+    border-left-color: rgb(135, 154, 57);
+    border-right-color: rgb(135, 154, 57);
+    border-top-color: rgb(135, 154, 57);
+    border-bottom-color: rgb(135, 154, 57);
+}
+
+.menu-button:active {
+    background-color: rgb(135, 154, 57);
+    color: rgb(16, 15, 15);
+}
+
+.menu-button:focus {
+    border-left-color: rgb(135, 154, 57);
+    border-right-color: rgb(135, 154, 57);
+    border-top-color: rgb(135, 154, 57);
+    border-bottom-color: rgb(135, 154, 57);
+}
