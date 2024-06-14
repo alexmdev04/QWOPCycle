@@ -1,4 +1,4 @@
-﻿using Assets.PlayerScripts;
+using Assets.PlayerScripts;
 using SideFX.Events;
 using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
@@ -10,6 +10,7 @@ namespace QWOPCycle.Scoring {
         [field: SerializeField] public float PedalPower { get; private set; }
 
         [SerializeField] private float _pedalPowerIncrement = 1f;
+        [SerializeField] private float _pedalPowerDecay = 0.1f;
         [SerializeField] private float _maxPedalPower = 10f;
 
         [SerializeField] private InputReader _input;
@@ -40,7 +41,7 @@ namespace QWOPCycle.Scoring {
 
         private void FixedUpdate() {
             if (_gameIsRunning && PedalPower > 0f) {
-                PedalPower -= _pedalPowerIncrement * Time.fixedDeltaTime;
+                PedalPower -= _pedalPowerDecay * Time.fixedDeltaTime;
                 PedalPower = math.clamp(PedalPower, 0f, _maxPedalPower);
             }
         }
