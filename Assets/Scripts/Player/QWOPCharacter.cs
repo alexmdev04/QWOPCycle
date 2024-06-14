@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.PlayerScripts;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class QWOPCharacter : MonoBehaviour
 {
@@ -14,16 +17,12 @@ public class QWOPCharacter : MonoBehaviour
     #region Vars
     [Header("Physics")]
     public float balanceForce = 100f;
-    [Range(-1.0f, 0.0f)]
-    public float minBalanceForceThreshold = -1.0f;
-    [Range(0.0f, 1.0f)]
-    public float maxBalanceForceThreshold = 1.0f;
+    public float maxBalanceForce = 1000f;
     public float fallAngleThreshold = 45.0f;
     public float steeringForce = 5.0f;
     public float maxSpeedWhenTilting = 0.5f;
     [Header("Settings")] 
     public bool canMove = true;
-    public Vector3 _pivotOffset;
     #endregion
     #region Delegates
     public event Action FellOverEvent = delegate { };
@@ -36,11 +35,7 @@ public class QWOPCharacter : MonoBehaviour
 
     private void SetupPlayer()
     {
-        if (_rigidBody is null)
-        {
-            _rigidBody = GetComponent<Rigidbody>();
-        }
-        _pivotOffset = new Vector3(0, -_rigidBody.transform.localScale.y / 2, 0);
+        _rigidBody = GetComponent<Rigidbody>();
     }
     #endregion
     #region Bind/Unbind
@@ -78,10 +73,7 @@ public class QWOPCharacter : MonoBehaviour
         }
 
         if (!canMove) return;
-        var normalisedTiltAngle = GetNormalisedTilt();
-        var rightTilt = transform.right;
-        var normalisedMinBalanceForce = Mathf.Clamp(normalisedTiltAngle, minBalanceForceThreshold, maxBalanceForceThreshold);
-        ApplyTorqueWithPivot(rightTilt * balanceForce * normalisedMinBalanceForce);
+        ApplyTorque(CalcPowerLevel());
         Debug.Log("QWOPCharacter : Trying to balance right!");
     }
     private void BalanceLeft()
@@ -93,17 +85,22 @@ public class QWOPCharacter : MonoBehaviour
         }
 
         if (!canMove) return;
-        var normalisedTiltAngle = GetNormalisedTilt();
-        var leftTilt = transform.right * -1;
-        var normalisedMinBalanceForce = Mathf.Clamp(normalisedTiltAngle, minBalanceForceThreshold, maxBalanceForceThreshold);
-        ApplyTorqueWithPivot(leftTilt * balanceForce * normalisedMinBalanceForce);
+        ApplyTorque(-CalcPowerLevel());
         Debug.Log("QWOPCharacter : Trying to balance left!");
     }
-    
-    private void ApplyTorqueWithPivot(Vector3 force)
+
+    private float CalcPowerLevel()
     {
-        Vector3 pivotWorldPosition = _rigidBody.position + _pivotOffset;
-        _rigidBody.AddForceAtPosition(force, pivotWorldPosition);
+        float a = (math.abs(transform.rotation.z));
+        float powerLevel = Mathf.InverseLerp(0, fallAngleThreshold, a);
+        Debug.Log($"QWOPCharacter : Power level is {powerLevel}");
+        return math.lerp(balanceForce, maxBalanceForce, powerLevel);
+    }
+
+    private void ApplyTorque(float power)
+    {
+        var newPower = power * transform.forward;
+        _rigidBody.AddRelativeTorque(newPower, ForceMode.Force);
     }
 
     private bool HasFallenOver()
@@ -111,7 +108,7 @@ public class QWOPCharacter : MonoBehaviour
         return GetTiltAngle() > fallAngleThreshold;
     }
 
-    public float GetTiltAngle()
+    private float GetTiltAngle()
     {
         return Vector3.Angle(Vector3.up, transform.up);
     }
@@ -134,7 +131,7 @@ public class QWOPCharacter : MonoBehaviour
     {
         //Determine the direction and magnitude of the steering force
         float steeringDirection = Vector3.Dot(transform.right, Vector3.up) > 0 ? -1 : 1;
-        float appliedSteeringForce = steeringForce * GetNormalisedTilt() * maxSpeedWhenTilting;
+        float appliedSteeringForce = steeringForce * GetNormalisedTilt() * steeringDirection * maxSpeedWhenTilting;
         
         //Apply the steering force | locked on the X axis only.
         _rigidBody.AddForce(Vector3.right * appliedSteeringForce, ForceMode.Acceleration);
