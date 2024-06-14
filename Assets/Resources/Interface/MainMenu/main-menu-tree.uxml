@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/Interface/MainMenu/main-menu-styles.uss?fileID=7433441132597879392&amp;guid=a7bc5827b48a4184db0e547effabdd8c&amp;type=3#main-menu-styles" />
+    <ui:VisualElement name="root" style="flex-grow: 1; flex-shrink: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; align-self: flex-start; width: 400px; align-items: center; justify-content: space-between; background-color: rgb(28, 27, 26); margin-top: 50px; margin-right: 50px; margin-bottom: 50px; margin-left: 50px;">
+        <ui:VisualElement name="top" style="flex-grow: 1; align-items: center; justify-content: center; align-self: center;">
+            <ui:Label tabindex="-1" text="QWOPCycle" parse-escape-sequences="false" display-tooltip-when-elided="true" name="title" style="font-size: 48px; -unity-text-align: middle-center; color: rgb(206, 205, 195);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="bottom" style="flex-grow: 1; align-items: stretch; justify-content: center; align-self: center;">
+            <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="start-game" class="menu-button" />
+            <ui:Button text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" name="options" class="menu-button" />
+            <ui:Button text="Exit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="exit" class="menu-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
