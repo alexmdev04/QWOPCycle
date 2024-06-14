@@ -12,10 +12,10 @@ namespace QWOPCycle.Scoring {
         [SerializeField] private float _pedalPowerIncrement = 1f;
         [SerializeField] private float _pedalPowerDecay = 0.1f;
         [SerializeField] private float _maxPedalPower = 10f;
-
         [SerializeField] private InputReader _input;
-        private EventBinding<SceneReady> _sceneReadyBinding;
+
         private bool _gameIsRunning;
+        private EventBinding<SceneReady> _sceneReadyBinding;
         private PedalState _state = PedalState.None;
 
         private enum PedalState {
