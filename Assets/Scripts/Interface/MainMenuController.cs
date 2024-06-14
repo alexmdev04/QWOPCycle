@@ -38,6 +38,12 @@ namespace Interface {
 
         private void ExitButtonPressed() {
             Debug.Log("Exit Button Pressed!");
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.ExitPlaymode();
+#else
+            Application.Quit();
+#endif
         }
     }
 }
