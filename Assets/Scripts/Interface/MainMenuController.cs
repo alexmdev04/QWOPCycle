@@ -1,10 +1,11 @@
 ﻿using SideFX.Events;
 using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Interface {
+namespace QWOPCycle.Interface {
     [RequireComponent(typeof(UIDocument))]
     public sealed class MainMenuController : MonoBehaviour {
         [field: SerializeField] private GameplayScene _gameplayScene;
@@ -40,7 +41,7 @@ namespace Interface {
             Debug.Log("Exit Button Pressed!");
 
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.ExitPlaymode();
+            EditorApplication.ExitPlaymode();
 #else
             Application.Quit();
 #endif
