@@ -22,6 +22,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ced42be744e7794b9aadbe719aa2336
+    m_Address: Assets/ScriptableObjects/Gameplay/ScoreTracker.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 73a9143145236ab4fb15acbe5d3d60bc, type: 2}
   m_SchemaSet:
