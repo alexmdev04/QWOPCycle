@@ -2,6 +2,7 @@ using Assets.PlayerScripts;
 using SideFX.Events;
 using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
+using Unity.Logging;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -47,7 +48,11 @@ namespace QWOPCycle.Scoring {
         }
 
         private void OnSceneReady(SceneReady e) {
-            _gameIsRunning = e.Scene is GameplayScene;
+            if (e.Scene is GameplayScene) {
+                _gameIsRunning = true;
+                PedalPower = 0f;
+                Log.Debug("[PedalPowerTracker] Starting");
+            }
         }
 
 
