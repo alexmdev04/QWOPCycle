@@ -22,9 +22,148 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         asset = InputActionAsset.FromJson(@"{
     ""name"": ""Controls"",
-    ""maps"": [],
+    ""maps"": [
+        {
+            ""name"": ""Play"",
+            ""id"": ""1e3f7c85-8401-4ccb-84c9-7c6c3dcb75e6"",
+            ""actions"": [
+                {
+                    ""name"": ""BalanceRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""bbc048dc-822c-462b-bfbb-bab3f815f013"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BalanceLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""318f8eed-fc7f-4120-abdd-0f8f192f8022"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PedalLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""371ef5ef-0a15-452d-9ec8-1c8664f47a1a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PedalRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""79965e4a-5fc3-4bd8-926c-799a17b0f95a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8da2fc3f-85ef-4bf2-ba71-5773d5a46c3c"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""445060a8-c4a6-4676-8908-7ea3b5a49872"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c46176ea-01df-4863-89e5-a8f777f73816"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1cb5ddda-6a07-4503-b52f-a121101939ec"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb052fd8-6dd5-4159-9dc9-79c6bcc64af9"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3bcc1ade-987b-48f7-9820-8c504027c2d1"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a922f659-9498-4fab-904c-60f4ee1e43e8"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d4973cf0-8c38-4d8c-9a2f-30c418cbe40f"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        }
+    ],
     ""controlSchemes"": []
 }");
+        // Play
+        m_Play = asset.FindActionMap("Play", throwIfNotFound: true);
+        m_Play_BalanceRight = m_Play.FindAction("BalanceRight", throwIfNotFound: true);
+        m_Play_BalanceLeft = m_Play.FindAction("BalanceLeft", throwIfNotFound: true);
+        m_Play_PedalLeft = m_Play.FindAction("PedalLeft", throwIfNotFound: true);
+        m_Play_PedalRight = m_Play.FindAction("PedalRight", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -81,5 +220,82 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     public int FindBinding(InputBinding bindingMask, out InputAction action)
     {
         return asset.FindBinding(bindingMask, out action);
+    }
+
+    // Play
+    private readonly InputActionMap m_Play;
+    private List<IPlayActions> m_PlayActionsCallbackInterfaces = new List<IPlayActions>();
+    private readonly InputAction m_Play_BalanceRight;
+    private readonly InputAction m_Play_BalanceLeft;
+    private readonly InputAction m_Play_PedalLeft;
+    private readonly InputAction m_Play_PedalRight;
+    public struct PlayActions
+    {
+        private @Controls m_Wrapper;
+        public PlayActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @BalanceRight => m_Wrapper.m_Play_BalanceRight;
+        public InputAction @BalanceLeft => m_Wrapper.m_Play_BalanceLeft;
+        public InputAction @PedalLeft => m_Wrapper.m_Play_PedalLeft;
+        public InputAction @PedalRight => m_Wrapper.m_Play_PedalRight;
+        public InputActionMap Get() { return m_Wrapper.m_Play; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayActions set) { return set.Get(); }
+        public void AddCallbacks(IPlayActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PlayActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PlayActionsCallbackInterfaces.Add(instance);
+            @BalanceRight.started += instance.OnBalanceRight;
+            @BalanceRight.performed += instance.OnBalanceRight;
+            @BalanceRight.canceled += instance.OnBalanceRight;
+            @BalanceLeft.started += instance.OnBalanceLeft;
+            @BalanceLeft.performed += instance.OnBalanceLeft;
+            @BalanceLeft.canceled += instance.OnBalanceLeft;
+            @PedalLeft.started += instance.OnPedalLeft;
+            @PedalLeft.performed += instance.OnPedalLeft;
+            @PedalLeft.canceled += instance.OnPedalLeft;
+            @PedalRight.started += instance.OnPedalRight;
+            @PedalRight.performed += instance.OnPedalRight;
+            @PedalRight.canceled += instance.OnPedalRight;
+        }
+
+        private void UnregisterCallbacks(IPlayActions instance)
+        {
+            @BalanceRight.started -= instance.OnBalanceRight;
+            @BalanceRight.performed -= instance.OnBalanceRight;
+            @BalanceRight.canceled -= instance.OnBalanceRight;
+            @BalanceLeft.started -= instance.OnBalanceLeft;
+            @BalanceLeft.performed -= instance.OnBalanceLeft;
+            @BalanceLeft.canceled -= instance.OnBalanceLeft;
+            @PedalLeft.started -= instance.OnPedalLeft;
+            @PedalLeft.performed -= instance.OnPedalLeft;
+            @PedalLeft.canceled -= instance.OnPedalLeft;
+            @PedalRight.started -= instance.OnPedalRight;
+            @PedalRight.performed -= instance.OnPedalRight;
+            @PedalRight.canceled -= instance.OnPedalRight;
+        }
+
+        public void RemoveCallbacks(IPlayActions instance)
+        {
+            if (m_Wrapper.m_PlayActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IPlayActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PlayActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PlayActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public PlayActions @Play => new PlayActions(this);
+    public interface IPlayActions
+    {
+        void OnBalanceRight(InputAction.CallbackContext context);
+        void OnBalanceLeft(InputAction.CallbackContext context);
+        void OnPedalLeft(InputAction.CallbackContext context);
+        void OnPedalRight(InputAction.CallbackContext context);
     }
 }
