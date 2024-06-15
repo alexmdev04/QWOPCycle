@@ -7,6 +7,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 namespace QWOPCycle.Scoring {
+    [CreateAssetMenu(fileName = "PedalTracker", menuName = "QWOPCycle/PedalTracker")]
     public sealed class PedalTracker : ScriptableObject {
         [field: SerializeField] public float PedalPower { get; private set; }
         public float MaxPedalPower => _maxPedalPower;
