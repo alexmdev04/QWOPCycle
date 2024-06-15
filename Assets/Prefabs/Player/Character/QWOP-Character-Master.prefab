@@ -176,7 +176,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   steeringMultiplier: 0.1
-  _canMove: 1
 --- !u!1 &1749882630627505056
 GameObject:
   m_ObjectHideFlags: 0
