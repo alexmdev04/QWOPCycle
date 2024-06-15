@@ -246,7 +246,27 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5652092473726735727}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &825898955
+--- !u!114 &825898952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825898951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39bb5e97aa2926648b86b9499e815e3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minBalanceForce: 4
+  maxBalanceForce: 50
+  balancePivotPoint: {x: 0, y: 0, z: 1}
+  balancePivotOffset: {x: 0, y: -1, z: 0}
+  fallAngleThreshold: 65
+  steeringForce: 1
+  maxSpeedWhenTilting: 0.5
+  enableDebug: 0
+--- !u!54 &825898953
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -256,8 +276,8 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 10
   m_Drag: 0
-  m_AngularDrag: 0.5
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_AngularDrag: 10
+  m_CenterOfMass: {x: 0, y: 1, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
@@ -271,8 +291,29 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 32
+  m_Constraints: 58
   m_CollisionDetection: 0
+--- !u!65 &825898956
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825898951}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.01, y: 1.5, z: 3.06}
+  m_Center: {x: 0, y: 0.78, z: 0}
 --- !u!1 &1351731863
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,6 +590,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5376074146618839777, guid: a27ee6029bf7b8542990f0f389e8e8a6,
+        type: 3}
+      propertyPath: enableDebug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5376074146618839777, guid: a27ee6029bf7b8542990f0f389e8e8a6,
+        type: 3}
+      propertyPath: steeringForce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5376074146618839777, guid: a27ee6029bf7b8542990f0f389e8e8a6,
+        type: 3}
+      propertyPath: maxBalanceForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5376074146618839777, guid: a27ee6029bf7b8542990f0f389e8e8a6,
+        type: 3}
+      propertyPath: minBalanceForce
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5376074146618839777, guid: a27ee6029bf7b8542990f0f389e8e8a6,
+        type: 3}
+      propertyPath: fallAngleThreshold
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5376074146618839777, guid: a27ee6029bf7b8542990f0f389e8e8a6,
+        type: 3}
+      propertyPath: balancePivotPoint.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5376074146618839777, guid: a27ee6029bf7b8542990f0f389e8e8a6,
+        type: 3}
+      propertyPath: balancePivotOffset.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6087053174323601728, guid: a27ee6029bf7b8542990f0f389e8e8a6,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -573,7 +649,7 @@ PrefabInstance:
     - target: {fileID: 6119414166169529993, guid: a27ee6029bf7b8542990f0f389e8e8a6,
         type: 3}
       propertyPath: steeringForce
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6119414166169529993, guid: a27ee6029bf7b8542990f0f389e8e8a6,
         type: 3}
@@ -602,13 +678,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2525004798040089109, guid: a27ee6029bf7b8542990f0f389e8e8a6, type: 3}
+    - {fileID: 5376074146618839777, guid: a27ee6029bf7b8542990f0f389e8e8a6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 773244771783748607, guid: a27ee6029bf7b8542990f0f389e8e8a6,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 825898955}
+      addedObject: {fileID: 825898953}
+    - targetCorrespondingSourceObject: {fileID: 773244771783748607, guid: a27ee6029bf7b8542990f0f389e8e8a6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 825898952}
+    - targetCorrespondingSourceObject: {fileID: 773244771783748607, guid: a27ee6029bf7b8542990f0f389e8e8a6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 825898956}
   m_SourcePrefab: {fileID: 100100000, guid: a27ee6029bf7b8542990f0f389e8e8a6, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
