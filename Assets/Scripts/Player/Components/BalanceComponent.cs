@@ -1,6 +1,7 @@
 using System;
 using QWOPCycle.Player;
 using SideFX.Events;
+using Unity.Logging;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -51,39 +52,40 @@ namespace QWOPCycle.Gameplay {
 #region Balance Logic
 
         public void BalanceRight() {
-            //if (HasFallenOver() && _canMove) { HandleFellOver(); }
+            if (!CanMove) {
+                if (enableDebug) Log.Verbose("Balance Component : Can't move, ignoring BalanceRight action!");
+                return;
+            }
 
-            if (!CanMove) return;
-            ApplyTorque(-CalcPowerLevel);
-            if (!enableDebug) return;
-            Debug.Log("QWOPCharacter : Trying to balance right!");
+            ApplyTorque(-CalcPowerLevel());
+            if (enableDebug) Log.Verbose("Balance Component : Trying to balance right!");
         }
 
         public void BalanceLeft() {
-            //if (HasFallenOver() && _canMove) { HandleFellOver(); }
+            if (!CanMove) {
+                if (enableDebug) Log.Verbose("Balance Component : Can't move, ignoring BalanceLeft action!");
+                return;
+            }
 
-            if (!CanMove) return;
-            ApplyTorque(CalcPowerLevel);
-            if (!enableDebug) return;
-            Debug.Log("Balance Component : Trying to balance left!");
+            ApplyTorque(CalcPowerLevel());
+            if (enableDebug) Log.Verbose("Balance Component : Trying to balance left!");
         }
 
         private void HandleFellOver() {
+            Log.Info("Balance Component : Fell over!");
             EventBus<PlayerFellOver>.Raise(default);
             //FellOverEvent?.Invoke();
             CanMove = false;
             _character.RigidBody.ResetInertiaTensor();
         }
 
-        private float CalcPowerLevel {
-            get {
-                float normalisedTiltAngle = Mathf.InverseLerp(0, fallAngleThreshold, AbsoluteTiltAngle);
-                float curveValue = balanceCurve.Evaluate(normalisedTiltAngle);
-                float balanceForceOut = math.lerp(minBalanceForce, maxBalanceForce, curveValue);
-                if (enableDebug) Debug.Log($"Balance Component : Balance force is {balanceForceOut}");
+        private float CalcPowerLevel() {
+            float normalisedTiltAngle = Mathf.InverseLerp(0, fallAngleThreshold, AbsoluteTiltAngle);
+            float curveValue = balanceCurve.Evaluate(normalisedTiltAngle);
+            float balanceForceOut = math.lerp(minBalanceForce, maxBalanceForce, curveValue);
+            if (enableDebug) Debug.Log($"Balance Component : Balance force is {balanceForceOut}");
 
-                return balanceForceOut;
-            }
+            return balanceForceOut;
         }
 
         private void ApplyTorque(float power) {
