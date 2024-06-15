@@ -2,21 +2,19 @@ using QWOPCycle.Player;
 using SideFX.Events;
 using SideFX.SceneManagement.Events;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace QWOPCycle.Gameplay {
     public class SteerComponent : MonoBehaviour {
         public float steeringMultiplier = 0.001f;
-        public bool canMove = true;
+        private bool _canMove = true;
         private QWOPCharacter _character;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
-
         private EventBinding<SceneReady> _sceneReadyBinding;
 
         private float PlayerXDelta => _character.BalanceComponent.TiltAngle * Time.deltaTime * steeringMultiplier;
 
         private void Update() {
-            if (!canMove) return;
+            if (!_canMove) return;
             transform.position = transform.position.With(transform.position.x - PlayerXDelta);
         }
 
@@ -36,12 +34,12 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void OnSceneReady(SceneReady e) {
-            canMove = true;
+            _canMove = true;
             _character.RigidBody.constraints = (RigidbodyConstraints)48 + 10; // freeze rot x and y, freeze pos x and z
         }
 
         private void OnFellOver() {
-            canMove = false;
+            _canMove = false;
             _character.RigidBody.constraints = (RigidbodyConstraints)48 + 8; // freeze rot x and y, freeze pos z
             //_character.RigidBody.velocity = _character.RigidBody.velocity.With(x: -PlayerXDelta);
         }
