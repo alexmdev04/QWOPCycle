@@ -116,9 +116,12 @@ namespace QWOPCycle.Gameplay {
 #region Fixed Updates
 
         private void FixedUpdate() {
+            if (!CanRun()) return;
             if (HasFallenOver() && CanMove) HandleFellOver();
             if (CanMove) ApplySteeringForce();
         }
+
+        private bool CanRun() => _character.gameManagerAnchor.IsSet;
 
         private void ApplySteeringForce() {
             //Determine the direction and magnitude of the steering force
