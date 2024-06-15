@@ -35,7 +35,8 @@ namespace QWOPCycle.Gameplay {
 
         private void OnSceneReady(SceneReady e) {
             _canMove = true;
-            _character.RigidBody.constraints = (RigidbodyConstraints)48 + 10; // freeze rot x and y, freeze pos x and z
+            _character.RigidBody.constraints =
+                (RigidbodyConstraints)48 + 2; // + 10; // freeze rot x and y, freeze pos x and z
         }
 
         private void OnFellOver() {
