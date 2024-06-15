@@ -37,6 +37,8 @@ namespace QWOPCycle.Gameplay {
 
         private EventBinding<SceneReady> _sceneReadyBinding;
 
+        [SerializeField] private ScoreTracker _scoreTracker;
+
         private void OnEnable() {
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
@@ -60,6 +62,7 @@ namespace QWOPCycle.Gameplay {
             if (!blocksReady) { return; }
             BlocksMoveToFrontCheck();
             BlocksMove();
+            TrackDistanceTravelled();
         }
 
         /// <summary>
@@ -111,6 +114,10 @@ namespace QWOPCycle.Gameplay {
             for (int i = 0; i < blocks.Length; i++) {
                 blocks[i].transform.position = blocks[i].transform.position.With(z: blockLength * i);
             }
+        }
+
+        private void TrackDistanceTravelled() {
+            _scoreTracker.AddDistance(trackSpeed * Time.deltaTime);
         }
     }
 }
