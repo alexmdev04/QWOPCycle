@@ -1,5 +1,6 @@
 using QWOPCycle.Player;
 using QWOPCycle.Scoring;
+using SideFX.Anchors;
 using SideFX.Events;
 using SideFX.SceneManagement.Events;
 using Unity.Logging;
@@ -12,6 +13,8 @@ namespace QWOPCycle.Gameplay {
     }
 
     public sealed class GameManager : MonoBehaviour {
+        [SerializeField] private GameManagerAnchor _anchor;
+
         [field: Header("Track Blocks")]
         [field: SerializeField]
         private GameObject blockPrefab;
@@ -34,8 +37,10 @@ namespace QWOPCycle.Gameplay {
 
         private float
             blockMoveToFrontThreshhold,
-            blockMoveDistanceOld,
-            blockLength;
+            blockMoveDistanceOld;
+
+        public float blockLength { get; private set; }
+        public float blockWidth { get; private set; }
 
         private EventBinding<SceneReady> _sceneReadyBinding;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
@@ -47,6 +52,7 @@ namespace QWOPCycle.Gameplay {
             _playerFellOverBinding = new EventBinding<PlayerFellOver>(OnPlayerFellOver);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Register(_playerFellOverBinding);
+            _anchor.Provide(this);
         }
 
         private void OnDisable() {
@@ -69,6 +75,7 @@ namespace QWOPCycle.Gameplay {
 
         private void Start() {
             blocks = new GameObject[blocksNumToCreate];
+            blockWidth = blockPrefab.transform.localScale.x;
             blockLength = blockPrefab.transform.localScale.z;
             blockMovedIndex = blocksNumToCreate - 1;
         }
