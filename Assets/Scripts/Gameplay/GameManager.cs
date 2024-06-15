@@ -83,8 +83,8 @@ namespace QWOPCycle.Gameplay {
         private void OnPlayerFellOver() {
             EventBus<GameOverEvent>.Raise(
                 new GameOverEvent {
-                    Score = scoreTracker.Score,
-                    Distance = scoreTracker.DistanceTravelled,
+                    Score = _scoreTracker.Score,
+                    Distance = _scoreTracker.DistanceTravelled,
                 }
             );
         }
@@ -142,7 +142,7 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void TrackDistanceTravelled() {
-            scoreTracker.AddDistance(trackSpeed * Time.deltaTime);
+            _scoreTracker.AddDistance(trackSpeed * Time.deltaTime);
         }
     }
 }
