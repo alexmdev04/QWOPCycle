@@ -1,14 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Assets.PlayerScripts;
-using QWOPCycle;
 using SideFX.Anchors;
-using Unity.Logging;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace QWOPCycle.Gameplay {
     [RequireComponent(typeof(BalanceComponent))]
