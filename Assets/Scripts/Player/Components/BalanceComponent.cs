@@ -100,14 +100,13 @@ namespace QWOPCycle.Gameplay {
         private bool HasFallenOver() =>
             AbsoluteTiltAngle > fallAngleThreshold
             || _character.RigidBody.transform.position.x
-            <= -_character.gameManagerAnchor.Value.BlockWidth / 2 + _character.bikeWidth
+            <= -_character.gameManagerAnchor.Value.BlockWidth / 2 - _character.bikeWidth
             || _character.RigidBody.transform.position.x
-            >= _character.gameManagerAnchor.Value.BlockWidth / 2 - _character.bikeWidth;
+            >= _character.gameManagerAnchor.Value.BlockWidth / 2 + _character.bikeWidth;
 
         private float AbsoluteTiltAngle =>
             Math.Abs(Vector3.Angle(Vector3.up, transform.up)); //provides absolute angle only.
 
-        //public float TiltAngle => Vector3.Angle(Vector3.up, transform.up); //Provides negative and positive angles.
         public float TiltAngle =>
             transform.eulerAngles.z >= 180f
                 ? transform.eulerAngles.z - 360f
