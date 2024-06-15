@@ -23,8 +23,6 @@ namespace QWOPCycle.Gameplay {
         [field: SerializeField] [field: Tooltip("In meters per second")]
         private float trackSpeed = 1f;
 
-        [SerializeField] private ScoreTracker scoreTracker;
-
         private int
             _blockMovedIndex,
             _blocksNumCreated;
@@ -37,8 +35,9 @@ namespace QWOPCycle.Gameplay {
 
         private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
-
         private EventBinding<SceneReady> _sceneReadyBinding;
+        private ScoreTracker _scoreTracker;
+        private PedalTracker _pedalTracker;
 
         public float BlockLength { get; private set; }
         public float BlockWidth { get; private set; }
@@ -55,6 +54,11 @@ namespace QWOPCycle.Gameplay {
             BlocksMoveToFrontCheck();
             BlocksMove();
             TrackDistanceTravelled();
+        }
+
+        private void Awake() {
+            _scoreTracker = ScriptableObject.CreateInstance<ScoreTracker>();
+            _pedalTracker = ScriptableObject.CreateInstance<PedalTracker>();
         }
 
         private void OnEnable() {
