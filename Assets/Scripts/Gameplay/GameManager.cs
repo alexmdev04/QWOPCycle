@@ -40,8 +40,9 @@ namespace QWOPCycle.Gameplay {
         private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
         private EventBinding<SceneReady> _sceneReadyBinding;
-        private ScoreTracker _scoreTracker;
-        private PedalTracker _pedalTracker;
+
+        [SerializeField] private ScoreTracker _scoreTracker;
+        [SerializeField] private PedalTracker _pedalTracker;
 
         public float BlockLength { get; private set; }
         public float BlockWidth { get; private set; }
@@ -73,11 +74,6 @@ namespace QWOPCycle.Gameplay {
                 case GameState.GameOver:
                     break;
             }
-        }
-
-        private void Awake() {
-            _scoreTracker = ScriptableObject.CreateInstance<ScoreTracker>();
-            _pedalTracker = ScriptableObject.CreateInstance<PedalTracker>();
         }
 
         private void OnEnable() {

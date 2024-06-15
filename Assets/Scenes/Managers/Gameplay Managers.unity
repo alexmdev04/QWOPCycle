@@ -157,6 +157,8 @@ MonoBehaviour:
   blocksNumToCreate: 7
   minTrackSpeed: 1
   maxSpeedBonus: 1
+  _scoreTracker: {fileID: 11400000, guid: 4ced42be744e7794b9aadbe719aa2336, type: 2}
+  _pedalTracker: {fileID: 11400000, guid: 9236c958fc54d074897948a9d585ff48, type: 2}
 --- !u!4 &91900217
 Transform:
   m_ObjectHideFlags: 0
@@ -237,7 +239,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &1888433058
 MonoBehaviour:
@@ -283,6 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 469de3f842968cc4ebe13ff3d950840a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _scoreTracker: {fileID: 11400000, guid: 4ced42be744e7794b9aadbe719aa2336, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
