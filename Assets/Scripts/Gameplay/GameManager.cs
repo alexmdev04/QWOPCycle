@@ -15,14 +15,17 @@ namespace QWOPCycle.Gameplay {
     public sealed class GameManager : MonoBehaviour {
         [SerializeField] private GameManagerAnchor anchor;
 
-        [field: Header("Track Blocks")] [field: SerializeField]
-        private GameObject blockPrefab;
+        [Header("Track Blocks")]
+        [SerializeField] private GameObject blockPrefab;
 
-        [field: SerializeField] [field: Tooltip("This value is only used in Start()")]
+        [SerializeField] [Tooltip("This value is only used in Start()")]
         private int blocksNumToCreate = 7;
 
-        [field: SerializeField] [field: Tooltip("In meters per second")]
-        private float trackSpeed = 1f;
+        [SerializeField] [Tooltip("In meters per second")]
+        private float minTrackSpeed = 1f;
+
+        [SerializeField] [Tooltip("In meters per second")]
+        private float maxSpeedBonus = 1f;
 
         private int
             _blockMovedIndex,
@@ -127,7 +130,7 @@ namespace QWOPCycle.Gameplay {
         private void BlocksMove() {
             foreach (GameObject scrollingBlock in _blocks) {
                 scrollingBlock.transform.position = scrollingBlock.transform.position.With(
-                    z: scrollingBlock.transform.position.z - trackSpeed * Time.deltaTime
+                    z: scrollingBlock.transform.position.z - GetTrackSpeed() * Time.deltaTime
                 );
             }
         }
@@ -157,7 +160,9 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void TrackDistanceTravelled() {
-            _scoreTracker.AddDistance(trackSpeed * Time.deltaTime);
+            _scoreTracker.AddDistance(GetTrackSpeed() * Time.deltaTime);
         }
+
+        private float GetTrackSpeed() => minTrackSpeed + _pedalTracker.PedalPowerRatio * maxSpeedBonus;
     }
 }

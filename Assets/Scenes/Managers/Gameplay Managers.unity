@@ -155,7 +155,8 @@ MonoBehaviour:
   blockPrefab: {fileID: 8455101753468990390, guid: 17e4e3aebd516df4fbcbf2528212064e,
     type: 3}
   blocksNumToCreate: 7
-  trackSpeed: 1
+  minTrackSpeed: 1
+  maxSpeedBonus: 1
 --- !u!4 &91900217
 Transform:
   m_ObjectHideFlags: 0
