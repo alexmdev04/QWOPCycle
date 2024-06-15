@@ -52,7 +52,7 @@ namespace QWOPCycle.Scoring {
         }
 
         public void Tick(float deltaTime) {
-            PedalPower -= _pedalPowerDecay * Time.fixedDeltaTime;
+            PedalPower -= _pedalPowerDecay * deltaTime;
             PedalPower = math.clamp(PedalPower, 0f, _maxPedalPower);
         }
 
