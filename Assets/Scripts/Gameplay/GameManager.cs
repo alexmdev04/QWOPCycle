@@ -2,6 +2,7 @@ using QWOPCycle.Player;
 using QWOPCycle.Scoring;
 using SideFX.Anchors;
 using SideFX.Events;
+using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
 using UnityEngine;
 
@@ -75,6 +76,7 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void OnSceneReady(SceneReady e) {
+            if (e.Scene is not GameplayScene) return;
             BlocksInitialize();
         }
 
