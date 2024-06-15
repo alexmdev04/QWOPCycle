@@ -29,16 +29,16 @@ namespace QWOPCycle.Interface {
         }
 
         private void StartButtonPressed() {
-            Debug.Log("Loading main gameplay scene!");
+            Debug.Log("MainMenuController : Loading main gameplay scene!");
             EventBus<LoadRequest>.Raise(new LoadRequest(_gameplayScene));
         }
 
         private void OptionsButtonPressed() {
-            Debug.Log("Options Button Pressed!");
+            Debug.Log("MainMenuController : Opening options menu!");
         }
 
         private void ExitButtonPressed() {
-            Debug.Log("Exit Button Pressed!");
+            Debug.Log("MainMenuController : Exiting QWOPCycle!");
 
 #if UNITY_EDITOR
             EditorApplication.ExitPlaymode();
