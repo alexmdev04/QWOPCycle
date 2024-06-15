@@ -17,8 +17,8 @@ namespace QWOPCycle.Gameplay {
     public sealed class GameManager : MonoBehaviour {
         [SerializeField] private GameManagerAnchor anchor;
 
-        [Header("Track Blocks")]
-        [SerializeField] private GameObject blockPrefab;
+        [Header("Track Blocks")] [SerializeField]
+        private Block blockPrefab;
 
         [SerializeField] [Tooltip("This value is only used in Start()")]
         private int blocksNumToCreate = 7;
@@ -37,7 +37,7 @@ namespace QWOPCycle.Gameplay {
             _blockMoveToFrontThreshold,
             _blockMoveDistanceOld;
 
-        private GameObject[] _blocks;
+        private Block[] _blocks;
 
         private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
@@ -56,7 +56,7 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void Start() {
-            _blocks = new GameObject[blocksNumToCreate];
+            _blocks = new Block[blocksNumToCreate];
             BlockWidth = blockPrefab.transform.localScale.x;
             BlockLength = blockPrefab.transform.localScale.z;
             _blockMovedIndex = blocksNumToCreate - 1;
@@ -111,7 +111,7 @@ namespace QWOPCycle.Gameplay {
         /// </summary>
         private void BlocksInitialize() {
             for (var i = 0; i < blocksNumToCreate; i++) {
-                GameObject blockNew = Instantiate(blockPrefab);
+                Block blockNew = Instantiate(blockPrefab);
                 blockNew.name = "block" + (i + 1);
                 blockNew.transform.position = blockNew.transform.position.With(z: BlockLength * i);
                 _blocks[i] = blockNew;
@@ -127,9 +127,9 @@ namespace QWOPCycle.Gameplay {
         /// positions
         /// </summary>
         private void BlocksMove() {
-            foreach (GameObject scrollingBlock in _blocks) {
-                scrollingBlock.transform.position = scrollingBlock.transform.position.With(
-                    z: scrollingBlock.transform.position.z - GetTrackSpeed() * Time.deltaTime
+            foreach (Block block in _blocks) {
+                block.transform.position = block.transform.position.With(
+                    z: block.transform.position.z - GetTrackSpeed() * Time.deltaTime
                 );
             }
         }
@@ -138,9 +138,9 @@ namespace QWOPCycle.Gameplay {
         /// If the block's Z is beyond or equal to the threshold, move it in front of the most recently moved block
         /// </summary>
         private void BlocksMoveToFrontCheck() {
-            foreach (GameObject scrollingBlock in _blocks) {
-                if (scrollingBlock.transform.position.z > _blockMoveToFrontThreshold) continue;
-                scrollingBlock.transform.position = scrollingBlock.transform.position.With(
+            foreach (Block block in _blocks) {
+                if (block.transform.position.z > _blockMoveToFrontThreshold) continue;
+                block.transform.position = block.transform.position.With(
                     z: _blocks[_blockMovedIndex].transform.position.z + BlockLength
                 );
 
