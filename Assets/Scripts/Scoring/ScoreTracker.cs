@@ -30,6 +30,7 @@ namespace QWOPCycle.Scoring {
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
             _gameOverBinding = new EventBinding<GameOverEvent>(OnGameOver);
             EventBus<ScoreEvent>.Register(_scoreBinding);
+            EventBus<SceneReady>.Register(_sceneReadyBinding);
             EventBus<GameOverEvent>.Register(_gameOverBinding);
         }
 
