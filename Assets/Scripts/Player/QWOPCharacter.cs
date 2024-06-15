@@ -13,8 +13,8 @@ public class QWOPCharacter : MonoBehaviour
     #region System
     [Header("Controller / Input Reader")]
     public InputReader inputReader;
-    private Rigidbody _rigidBody;
-    private BalanceComponent _balanceComponent;
+    public Rigidbody RigidBody { get; private set; }
+    public BalanceComponent BalanceComponent { get; private set; }
     #endregion
     #region Vars
     [Header("Settings")] 
@@ -28,9 +28,9 @@ public class QWOPCharacter : MonoBehaviour
 
     private void SetupPlayer()
     {
-        _rigidBody = GetComponent<Rigidbody>();
-        _balanceComponent = GetComponent<BalanceComponent>();
-        _balanceComponent.CanMove = canMove;
+        RigidBody = GetComponent<Rigidbody>();
+        BalanceComponent = GetComponent<BalanceComponent>();
+        BalanceComponent.CanMove = canMove;
     }
     #endregion
     #region Bind/Unbind
@@ -47,16 +47,15 @@ public class QWOPCharacter : MonoBehaviour
 
     private void BindController()
     {
-        inputReader.BalanceLeftEvent += _balanceComponent.BalanceLeft;
-        inputReader.BalanceRightEvent += _balanceComponent.BalanceRight;
+        inputReader.BalanceLeftEvent += BalanceComponent.BalanceLeft;
+        inputReader.BalanceRightEvent += BalanceComponent.BalanceRight;
     }
 
     private void UnbindController()
     {
-        inputReader.BalanceLeftEvent -= _balanceComponent.BalanceLeft;
-        inputReader.BalanceRightEvent -= _balanceComponent.BalanceRight;
+        inputReader.BalanceLeftEvent -= BalanceComponent.BalanceLeft;
+        inputReader.BalanceRightEvent -= BalanceComponent.BalanceRight;
     }
 
     #endregion
-    
 }

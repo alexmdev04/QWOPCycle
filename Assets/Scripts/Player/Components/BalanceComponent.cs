@@ -109,7 +109,8 @@ public class BalanceComponent : MonoBehaviour
     {
         return AbsoluteTiltAngle > fallAngleThreshold;
     }
-    private float AbsoluteTiltAngle => Math.Abs(Vector3.Angle(Vector3.up, transform.up));
+    private float AbsoluteTiltAngle => Math.Abs(Vector3.Angle(Vector3.up, transform.up)); //provides absolute angle only.
+    public float TiltAngle => Vector3.Angle(Vector3.up, transform.up); //Provides negative and positive angles.
 
     #endregion
     #region Fixed Updates

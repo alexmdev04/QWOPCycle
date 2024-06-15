@@ -258,8 +258,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39bb5e97aa2926648b86b9499e815e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minBalanceForce: 4
-  maxBalanceForce: 50
+  minBalanceForce: 7
+  maxBalanceForce: 35
   balancePivotPoint: {x: 0, y: 0, z: 1}
   balancePivotOffset: {x: 0, y: -1, z: 0}
   fallAngleThreshold: 65
