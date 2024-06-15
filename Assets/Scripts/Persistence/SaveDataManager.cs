@@ -1,4 +1,4 @@
-﻿using SideFX.Events;
+using SideFX.Events;
 using Unity.Logging;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ namespace QWOPCycle.Persistence {
     /// </summary>
     public readonly struct SaveSettingsEvent : IEvent { }
 
-    public sealed class SaveDataManager : ScriptableObject {
+    public sealed class SaveDataManager : MonoBehaviour {
         public SaveData Save { get; private set; }
         public GameSettings Settings { get; private set; }
 
