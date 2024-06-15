@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: a02f275e462a1ef44a97b48019331bc4, type: 2}
   canMove: 1
+  bikeWidth: 0.05
 --- !u!114 &8053862053522428911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +158,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  fallAngleThreshold: 65
+  fallAngleThreshold: 55
   steeringForce: 1
   maxSpeedWhenTilting: 0.5
   enableDebug: 0
@@ -173,8 +174,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 355d2a56be11b454c9302d4038f5fd84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steeringMultiplier: 0.0001
+  steeringMultiplier: 0.1
   _canMove: 1
+  _gameManagerAnchor: {fileID: 11400000, guid: 0b2f2e744a886684b8a63380ea758f22, type: 2}
 --- !u!1 &1749882630627505056
 GameObject:
   m_ObjectHideFlags: 0

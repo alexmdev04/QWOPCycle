@@ -52,7 +52,7 @@ namespace QWOPCycle.Gameplay {
         #region Balance Logic
 
         public void BalanceRight() {
-            if (HasFallenOver() && _canMove) { HandleFellOver(); }
+            //if (HasFallenOver() && _canMove) { HandleFellOver(); }
 
             if (!_canMove) return;
             ApplyTorque(-CalcPowerLevel);
@@ -61,7 +61,7 @@ namespace QWOPCycle.Gameplay {
         }
 
         public void BalanceLeft() {
-            if (HasFallenOver() && _canMove) { HandleFellOver(); }
+            //if (HasFallenOver() && _canMove) { HandleFellOver(); }
 
             if (!_canMove) return;
             ApplyTorque(CalcPowerLevel);
@@ -112,6 +112,7 @@ namespace QWOPCycle.Gameplay {
         #region Fixed Updates
 
         private void FixedUpdate() {
+            if (HasFallenOver() && _canMove) { HandleFellOver(); }
             if (_canMove) { ApplySteeringForce(); }
         }
 

@@ -11,6 +11,7 @@ using UnityEngine.Serialization;
 
 namespace QWOPCycle.Gameplay {
     [RequireComponent(typeof(BalanceComponent))]
+    [RequireComponent(typeof(SteerComponent))]
     public class QWOPCharacter : MonoBehaviour {
         #region System
 
@@ -22,7 +23,9 @@ namespace QWOPCycle.Gameplay {
 #endregion
         #region Vars
 
-        [Header("Settings")] public bool canMove = true;
+        [Header("Settings")]
+        public bool canMove = true;
+        public float bikeWidth = 0.05f;
 
 #endregion
         #region Initialisation
