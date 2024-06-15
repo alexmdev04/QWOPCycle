@@ -2,6 +2,7 @@ using QWOPCycle.Player;
 using QWOPCycle.Scoring;
 using SideFX.Anchors;
 using SideFX.Events;
+using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
 using UnityEngine;
 
@@ -14,16 +15,17 @@ namespace QWOPCycle.Gameplay {
     public sealed class GameManager : MonoBehaviour {
         [SerializeField] private GameManagerAnchor anchor;
 
-        [field: Header("Track Blocks")] [field: SerializeField]
-        private GameObject blockPrefab;
+        [Header("Track Blocks")]
+        [SerializeField] private GameObject blockPrefab;
 
-        [field: SerializeField] [field: Tooltip("This value is only used in Start()")]
+        [SerializeField] [Tooltip("This value is only used in Start()")]
         private int blocksNumToCreate = 7;
 
-        [field: SerializeField] [field: Tooltip("In meters per second")]
-        private float trackSpeed = 1f;
+        [SerializeField] [Tooltip("In meters per second")]
+        private float minTrackSpeed = 1f;
 
-        [SerializeField] private ScoreTracker scoreTracker;
+        [SerializeField] [Tooltip("In meters per second")]
+        private float maxSpeedBonus = 1f;
 
         private int
             _blockMovedIndex,
@@ -37,11 +39,18 @@ namespace QWOPCycle.Gameplay {
 
         private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
-
         private EventBinding<SceneReady> _sceneReadyBinding;
+        private ScoreTracker _scoreTracker;
+        private PedalTracker _pedalTracker;
 
         public float BlockLength { get; private set; }
         public float BlockWidth { get; private set; }
+
+        private GameState _gameState = GameState.Building;
+
+        private enum GameState {
+            Building, Running, GameOver,
+        }
 
         private void Start() {
             _blocks = new GameObject[blocksNumToCreate];
@@ -51,10 +60,24 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void Update() {
-            if (!_blocksReady) return;
-            BlocksMoveToFrontCheck();
-            BlocksMove();
-            TrackDistanceTravelled();
+            switch (_gameState) {
+                case GameState.Building:
+                    if (_blocksReady) _gameState = GameState.Running;
+                    return;
+                case GameState.Running:
+                    BlocksMoveToFrontCheck();
+                    BlocksMove();
+                    TrackDistanceTravelled();
+                    _pedalTracker.Tick(Time.deltaTime);
+                    return;
+                case GameState.GameOver:
+                    break;
+            }
+        }
+
+        private void Awake() {
+            _scoreTracker = ScriptableObject.CreateInstance<ScoreTracker>();
+            _pedalTracker = ScriptableObject.CreateInstance<PedalTracker>();
         }
 
         private void OnEnable() {
@@ -71,14 +94,15 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void OnSceneReady(SceneReady e) {
+            if (e.Scene is not GameplayScene) return;
             BlocksInitialize();
         }
 
         private void OnPlayerFellOver() {
             EventBus<GameOverEvent>.Raise(
                 new GameOverEvent {
-                    Score = scoreTracker.Score,
-                    Distance = scoreTracker.DistanceTravelled,
+                    Score = _scoreTracker.Score,
+                    Distance = _scoreTracker.DistanceTravelled,
                 }
             );
         }
@@ -106,7 +130,7 @@ namespace QWOPCycle.Gameplay {
         private void BlocksMove() {
             foreach (GameObject scrollingBlock in _blocks) {
                 scrollingBlock.transform.position = scrollingBlock.transform.position.With(
-                    z: scrollingBlock.transform.position.z - trackSpeed * Time.deltaTime
+                    z: scrollingBlock.transform.position.z - GetTrackSpeed() * Time.deltaTime
                 );
             }
         }
@@ -136,7 +160,9 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void TrackDistanceTravelled() {
-            scoreTracker.AddDistance(trackSpeed * Time.deltaTime);
+            _scoreTracker.AddDistance(GetTrackSpeed() * Time.deltaTime);
         }
+
+        private float GetTrackSpeed() => minTrackSpeed + _pedalTracker.PedalPowerRatio * maxSpeedBonus;
     }
 }
