@@ -1,4 +1,5 @@
-﻿using SideFX.Events;
+using QWOPCycle.Gameplay;
+using SideFX.Events;
 using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
 using Unity.Logging;
@@ -21,23 +22,32 @@ namespace QWOPCycle.Scoring {
 
         private EventBinding<ScoreEvent> _scoreBinding;
         private EventBinding<SceneReady> _sceneReadyBinding;
+        private EventBinding<GameOverEvent> _gameOverBinding;
+        private bool _shouldTrack;
 
         private void OnEnable() {
             _scoreBinding = new EventBinding<ScoreEvent>(OnScore);
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
+            _gameOverBinding = new EventBinding<GameOverEvent>(OnGameOver);
             EventBus<ScoreEvent>.Register(_scoreBinding);
+            EventBus<GameOverEvent>.Register(_gameOverBinding);
         }
 
         private void OnDisable() {
             EventBus<ScoreEvent>.Deregister(_scoreBinding);
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
+            EventBus<GameOverEvent>.Deregister(_gameOverBinding);
         }
 
-        public void AddDistance(float distance) => DistanceTravelled += distance;
+        public void AddDistance(float distance) {
+            if (!_shouldTrack) return;
+            DistanceTravelled += distance;
+        }
 
 #region EventHandlers
 
         private void OnScore(ScoreEvent e) {
+            if (!_shouldTrack) return;
             Score += e.Value;
             Log.Verbose("ScoreTracker : Score increased by {0}, new score: {1}", e.Value, Score);
         }
@@ -51,6 +61,11 @@ namespace QWOPCycle.Scoring {
             Log.Verbose("ScoreTracker : Resetting");
             Score = 0;
             DistanceTravelled = 0f;
+            _shouldTrack = true;
+        }
+
+        private void OnGameOver(GameOverEvent e) {
+            _shouldTrack = false;
         }
 
 #endregion
