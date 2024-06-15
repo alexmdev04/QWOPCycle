@@ -1,3 +1,5 @@
+using QWOPCycle.Player;
+using QWOPCycle.Scoring;
 using SideFX.Events;
 using SideFX.SceneManagement.Events;
 using Unity.Logging;
@@ -5,8 +7,8 @@ using UnityEngine;
 
 namespace QWOPCycle.Gameplay {
     public readonly struct GameOverEvent : IEvent {
-        public readonly uint Score;
-        public readonly float Distance;
+        public uint Score { get; init; }
+        public float Distance { get; init; }
     }
 
     public sealed class GameManager : MonoBehaviour {
@@ -36,20 +38,33 @@ namespace QWOPCycle.Gameplay {
             blockLength;
 
         private EventBinding<SceneReady> _sceneReadyBinding;
+        private EventBinding<PlayerFellOver> _playerFellOverBinding;
 
         [SerializeField] private ScoreTracker _scoreTracker;
 
         private void OnEnable() {
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
+            _playerFellOverBinding = new EventBinding<PlayerFellOver>(OnPlayerFellOver);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
+            EventBus<PlayerFellOver>.Register(_playerFellOverBinding);
         }
 
         private void OnDisable() {
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
+            EventBus<PlayerFellOver>.Deregister(_playerFellOverBinding);
         }
 
         private void OnSceneReady(SceneReady e) {
             BlocksInitialize();
+        }
+
+        private void OnPlayerFellOver() {
+            EventBus<GameOverEvent>.Raise(
+                new GameOverEvent {
+                    Score = _scoreTracker.Score,
+                    Distance = _scoreTracker.DistanceTravelled,
+                }
+            );
         }
 
         private void Start() {
