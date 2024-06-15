@@ -43,6 +43,12 @@ namespace QWOPCycle.Gameplay {
         public float BlockLength { get; private set; }
         public float BlockWidth { get; private set; }
 
+        private GameState _gameState = GameState.Building;
+
+        private enum GameState {
+            Building, Running, GameOver,
+        }
+
         private void Start() {
             _blocks = new GameObject[blocksNumToCreate];
             BlockWidth = blockPrefab.transform.localScale.x;
@@ -51,10 +57,19 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void Update() {
-            if (!_blocksReady) return;
-            BlocksMoveToFrontCheck();
-            BlocksMove();
-            TrackDistanceTravelled();
+            switch (_gameState) {
+                case GameState.Building:
+                    if (_blocksReady) _gameState = GameState.Running;
+                    return;
+                case GameState.Running:
+                    BlocksMoveToFrontCheck();
+                    BlocksMove();
+                    TrackDistanceTravelled();
+                    _pedalTracker.Tick(Time.deltaTime);
+                    return;
+                case GameState.GameOver:
+                    break;
+            }
         }
 
         private void Awake() {
