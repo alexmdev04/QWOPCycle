@@ -15,11 +15,12 @@ public class BalanceComponent : MonoBehaviour
     private Rigidbody _rigidBody;
     #endregion
     #region Vars
-    [Header("Physics")]
+    [Header("Balance Physics")]
     public float minBalanceForce = 100f;
     public float maxBalanceForce = 1000f;
     public Vector3 balancePivotPoint = new Vector3(0.0f, 0.0f, 1.0f);
     public Vector3 balancePivotOffset;
+    public AnimationCurve balanceCurve = AnimationCurve.Linear(0, 0, 1, 1);
     public float fallAngleThreshold = 45.0f;
     public float steeringForce = 5.0f;
     public float maxSpeedWhenTilting = 0.5f;
@@ -85,8 +86,9 @@ public class BalanceComponent : MonoBehaviour
     {
         get
         {
-            var powerLevel = Mathf.InverseLerp(0, fallAngleThreshold, AbsoluteTiltAngle);
-            var balanceForceOut = math.lerp(minBalanceForce, maxBalanceForce, powerLevel);
+            var normalisedTiltAngle = Mathf.InverseLerp(0, fallAngleThreshold, AbsoluteTiltAngle);
+            var curveValue = balanceCurve.Evaluate(normalisedTiltAngle);
+            var balanceForceOut = math.lerp(minBalanceForce, maxBalanceForce, curveValue);
             if (enableDebug)
             {
                 Debug.Log($"Balance Component : Balance force is {balanceForceOut}");
