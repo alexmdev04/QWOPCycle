@@ -9,6 +9,7 @@ namespace QWOPCycle.Persistence {
         private const string FILENAME = "save.data";
 
         public uint HighScore { get; private set; }
+        public float BestDistance { get; private set; }
 
         public static SaveData Load() {
             string filepath = Path.Combine(Application.persistentDataPath, FILENAME);
@@ -29,13 +30,19 @@ namespace QWOPCycle.Persistence {
         }
 
         public bool PostScore(ScoreTracker score) {
-            if (score.Score > HighScore) {
-                HighScore = score.Score;
-                Save();
-                return true;
-            }
+            if (score.Score <= HighScore) return false;
 
-            return false;
+            HighScore = score.Score;
+            Save();
+            return true;
+        }
+
+        public bool PostDistance(float distance) {
+            if (distance <= BestDistance) return false;
+
+            BestDistance = distance;
+            Save();
+            return true;
         }
     }
 }
