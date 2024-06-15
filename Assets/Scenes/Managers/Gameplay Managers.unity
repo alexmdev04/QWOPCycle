@@ -151,11 +151,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a107ef11940ad84a93f4cf1f6198260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _anchor: {fileID: 11400000, guid: 0b2f2e744a886684b8a63380ea758f22, type: 2}
+  anchor: {fileID: 11400000, guid: 0b2f2e744a886684b8a63380ea758f22, type: 2}
   blockPrefab: {fileID: 8455101753468990390, guid: 17e4e3aebd516df4fbcbf2528212064e,
     type: 3}
   blocksNumToCreate: 7
   trackSpeed: 1
+  scoreTracker: {fileID: 11400000, guid: 4ced42be744e7794b9aadbe719aa2336, type: 2}
 --- !u!4 &91900217
 Transform:
   m_ObjectHideFlags: 0

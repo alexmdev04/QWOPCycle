@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.PlayerScripts;
 using QWOPCycle;
+using SideFX.Anchors;
 using Unity.Logging;
 using Unity.Mathematics;
 using Unity.VisualScripting;
@@ -16,6 +17,7 @@ namespace QWOPCycle.Gameplay {
         #region System
 
         [Header("Controller / Input Reader")] public InputReader inputReader;
+        [Header("Game Manager")] public GameManagerAnchor gameManagerAnchor;
         public Rigidbody RigidBody { get; private set; }
         public BalanceComponent BalanceComponent { get; private set; }
         public SteerComponent SteerComponent { get; private set; }
@@ -37,8 +39,10 @@ namespace QWOPCycle.Gameplay {
         private void SetupPlayer() {
             RigidBody = GetComponent<Rigidbody>();
             BalanceComponent = GetComponent<BalanceComponent>();
+            BalanceComponent.SetCharacter(this);
             BalanceComponent.CanMove = canMove;
             SteerComponent = GetComponent<SteerComponent>();
+            SteerComponent.SetCharacter(this);
         }
 
 #endregion

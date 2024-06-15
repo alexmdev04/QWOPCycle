@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: a02f275e462a1ef44a97b48019331bc4, type: 2}
+  gameManagerAnchor: {fileID: 11400000, guid: 0b2f2e744a886684b8a63380ea758f22, type: 2}
   canMove: 1
   bikeWidth: 0.05
 --- !u!114 &8053862053522428911
@@ -176,7 +177,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   steeringMultiplier: 0.1
   _canMove: 1
-  _gameManagerAnchor: {fileID: 11400000, guid: 0b2f2e744a886684b8a63380ea758f22, type: 2}
 --- !u!1 &1749882630627505056
 GameObject:
   m_ObjectHideFlags: 0

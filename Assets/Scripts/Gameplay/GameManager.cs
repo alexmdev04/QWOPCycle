@@ -3,7 +3,6 @@ using QWOPCycle.Scoring;
 using SideFX.Anchors;
 using SideFX.Events;
 using SideFX.SceneManagement.Events;
-using Unity.Logging;
 using UnityEngine;
 
 namespace QWOPCycle.Gameplay {
@@ -13,46 +12,57 @@ namespace QWOPCycle.Gameplay {
     }
 
     public sealed class GameManager : MonoBehaviour {
-        [SerializeField] private GameManagerAnchor _anchor;
+        [SerializeField] private GameManagerAnchor anchor;
 
-        [field: Header("Track Blocks")]
-        [field: SerializeField]
+        [field: Header("Track Blocks")] [field: SerializeField]
         private GameObject blockPrefab;
 
-        [field: SerializeField]
-        [field: Tooltip("This value is only used in Start()")]
+        [field: SerializeField] [field: Tooltip("This value is only used in Start()")]
         private int blocksNumToCreate = 7;
 
-        [field: SerializeField]
-        [field: Tooltip("In meters per second")]
+        [field: SerializeField] [field: Tooltip("In meters per second")]
         private float trackSpeed = 1f;
 
-        private GameObject[] blocks;
-
-        private bool blocksReady;
+        [SerializeField] private ScoreTracker scoreTracker;
 
         private int
-            blockMovedIndex,
-            blocksNumCreated;
+            _blockMovedIndex,
+            _blocksNumCreated;
 
         private float
-            blockMoveToFrontThreshhold,
-            blockMoveDistanceOld;
+            _blockMoveToFrontThreshold,
+            _blockMoveDistanceOld;
 
-        public float blockLength { get; private set; }
-        public float blockWidth { get; private set; }
+        private GameObject[] _blocks;
 
-        private EventBinding<SceneReady> _sceneReadyBinding;
+        private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
 
-        [SerializeField] private ScoreTracker _scoreTracker;
+        private EventBinding<SceneReady> _sceneReadyBinding;
+
+        public float BlockLength { get; private set; }
+        public float BlockWidth { get; private set; }
+
+        private void Start() {
+            _blocks = new GameObject[blocksNumToCreate];
+            BlockWidth = blockPrefab.transform.localScale.x;
+            BlockLength = blockPrefab.transform.localScale.z;
+            _blockMovedIndex = blocksNumToCreate - 1;
+        }
+
+        private void Update() {
+            if (!_blocksReady) return;
+            BlocksMoveToFrontCheck();
+            BlocksMove();
+            TrackDistanceTravelled();
+        }
 
         private void OnEnable() {
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
             _playerFellOverBinding = new EventBinding<PlayerFellOver>(OnPlayerFellOver);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Register(_playerFellOverBinding);
-            _anchor.Provide(this);
+            anchor.Provide(this);
         }
 
         private void OnDisable() {
@@ -67,49 +77,37 @@ namespace QWOPCycle.Gameplay {
         private void OnPlayerFellOver() {
             EventBus<GameOverEvent>.Raise(
                 new GameOverEvent {
-                    Score = _scoreTracker.Score,
-                    Distance = _scoreTracker.DistanceTravelled,
+                    Score = scoreTracker.Score,
+                    Distance = scoreTracker.DistanceTravelled,
                 }
             );
-        }
-
-        private void Start() {
-            blocks = new GameObject[blocksNumToCreate];
-            blockWidth = blockPrefab.transform.localScale.x;
-            blockLength = blockPrefab.transform.localScale.z;
-            blockMovedIndex = blocksNumToCreate - 1;
-        }
-
-        private void Update() {
-            if (!blocksReady) { return; }
-            BlocksMoveToFrontCheck();
-            BlocksMove();
-            TrackDistanceTravelled();
         }
 
         /// <summary>
         /// Instantiates all blocks and sets values
         /// </summary>
         private void BlocksInitialize() {
-            for (int i = 0; i < blocksNumToCreate; i++) {
+            for (var i = 0; i < blocksNumToCreate; i++) {
                 GameObject blockNew = Instantiate(blockPrefab);
                 blockNew.name = "block" + (i + 1);
-                blockNew.transform.position = blockNew.transform.position.With(z: blockLength * i);
-                blocks[i] = blockNew;
+                blockNew.transform.position = blockNew.transform.position.With(z: BlockLength * i);
+                _blocks[i] = blockNew;
             }
 
-            blocksNumCreated = blocksNumToCreate;
-            blockMoveToFrontThreshhold = 0f - blockLength;
-            blocksReady = true;
+            _blocksNumCreated = blocksNumToCreate;
+            _blockMoveToFrontThreshold = 0f - BlockLength;
+            _blocksReady = true;
         }
 
         /// <summary>
-        /// Moves all blocks towards the player by ScrollBlockDistance(). if the value alters during runtime, reset all block positions
+        /// Moves all blocks towards the player by ScrollBlockDistance(). if the value alters during runtime, reset all block
+        /// positions
         /// </summary>
         private void BlocksMove() {
-            foreach (GameObject scrollingBlock in blocks) {
+            foreach (GameObject scrollingBlock in _blocks) {
                 scrollingBlock.transform.position = scrollingBlock.transform.position.With(
-                    z: scrollingBlock.transform.position.z - (trackSpeed * Time.deltaTime));
+                    z: scrollingBlock.transform.position.z - trackSpeed * Time.deltaTime
+                );
             }
         }
 
@@ -117,14 +115,14 @@ namespace QWOPCycle.Gameplay {
         /// If the block's Z is beyond or equal to the threshold, move it in front of the most recently moved block
         /// </summary>
         private void BlocksMoveToFrontCheck() {
-            foreach (GameObject scrollingBlock in blocks)
-            {
-                if (scrollingBlock.transform.position.z > blockMoveToFrontThreshhold) { continue; }
+            foreach (GameObject scrollingBlock in _blocks) {
+                if (scrollingBlock.transform.position.z > _blockMoveToFrontThreshold) continue;
                 scrollingBlock.transform.position = scrollingBlock.transform.position.With(
-                    z: blocks[blockMovedIndex].transform.position.z + blockLength);
+                    z: _blocks[_blockMovedIndex].transform.position.z + BlockLength
+                );
 
-                blockMovedIndex++;
-                if (blockMovedIndex >= blocksNumCreated) { blockMovedIndex = 0; }
+                _blockMovedIndex++;
+                if (_blockMovedIndex >= _blocksNumCreated) _blockMovedIndex = 0;
             }
         }
 
@@ -132,14 +130,13 @@ namespace QWOPCycle.Gameplay {
         /// Resets all blocks to starting positions
         /// </summary>
         private void BlocksResetPositions() {
-            blockMovedIndex = blocksNumCreated - 1;
-            for (int i = 0; i < blocks.Length; i++) {
-                blocks[i].transform.position = blocks[i].transform.position.With(z: blockLength * i);
-            }
+            _blockMovedIndex = _blocksNumCreated - 1;
+            for (var i = 0; i < _blocks.Length; i++)
+                _blocks[i].transform.position = _blocks[i].transform.position.With(z: BlockLength * i);
         }
 
         private void TrackDistanceTravelled() {
-            _scoreTracker.AddDistance(trackSpeed * Time.deltaTime);
+            scoreTracker.AddDistance(trackSpeed * Time.deltaTime);
         }
     }
 }

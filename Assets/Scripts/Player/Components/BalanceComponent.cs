@@ -1,60 +1,59 @@
 using System;
-using Unity.Logging;
+using QWOPCycle.Player;
+using SideFX.Events;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace QWOPCycle.Gameplay {
     [RequireComponent(typeof(Rigidbody))]
     public class BalanceComponent : MonoBehaviour {
-        #region Component References
+#region Component References
 
-        private Rigidbody _rigidBody;
+        //public Rigidbody _rigidBody;
+        private QWOPCharacter _character;
 
 #endregion
-        #region Vars
+
+#region Getter Setters
+
+        [field: Header("Settings")] public bool CanMove { get; set; } = true;
+
+#endregion
+
+#region Intialisation
+
+        public void SetCharacter(QWOPCharacter character) {
+            _character = character;
+        }
+
+#endregion
+
+#region Vars
 
         [Header("Balance Physics")] public float minBalanceForce = 100f;
         public float maxBalanceForce = 1000f;
-        public Vector3 balancePivotPoint = new Vector3(0.0f, 0.0f, 1.0f);
+        public Vector3 balancePivotPoint = new(0.0f, 0.0f, 1.0f);
         public Vector3 balancePivotOffset;
         public AnimationCurve balanceCurve = AnimationCurve.Linear(0, 0, 1, 1);
         public float fallAngleThreshold = 45.0f;
         public float steeringForce = 5.0f;
         public float maxSpeedWhenTilting = 0.5f;
-        [Header("Settings")] private bool _canMove = true;
-        public bool enableDebug = false;
+        public bool enableDebug;
 
 #endregion
-        #region Getter Setters
 
-        public bool CanMove {
-            get => _canMove;
-            set => _canMove = value;
-        }
+#region Delegates
+
+        //public event Action FellOverEvent;
 
 #endregion
-        #region Delegates
 
-        public event Action FellOverEvent;
-
-#endregion
-        #region Intialisation
-
-        private void Awake() {
-            SetupBalanceComponent();
-        }
-
-        private void SetupBalanceComponent() {
-            _rigidBody = GetComponent<Rigidbody>();
-        }
-
-#endregion
-        #region Balance Logic
+#region Balance Logic
 
         public void BalanceRight() {
             //if (HasFallenOver() && _canMove) { HandleFellOver(); }
 
-            if (!_canMove) return;
+            if (!CanMove) return;
             ApplyTorque(-CalcPowerLevel);
             if (!enableDebug) return;
             Debug.Log("QWOPCharacter : Trying to balance right!");
@@ -63,41 +62,45 @@ namespace QWOPCycle.Gameplay {
         public void BalanceLeft() {
             //if (HasFallenOver() && _canMove) { HandleFellOver(); }
 
-            if (!_canMove) return;
+            if (!CanMove) return;
             ApplyTorque(CalcPowerLevel);
             if (!enableDebug) return;
             Debug.Log("Balance Component : Trying to balance left!");
         }
 
         private void HandleFellOver() {
-            FellOverEvent?.Invoke();
-            _canMove = false;
-            _rigidBody.ResetInertiaTensor();
+            EventBus<PlayerFellOver>.Raise(default);
+            //FellOverEvent?.Invoke();
+            CanMove = false;
+            _character.RigidBody.ResetInertiaTensor();
         }
 
         private float CalcPowerLevel {
             get {
-                var normalisedTiltAngle = Mathf.InverseLerp(0, fallAngleThreshold, AbsoluteTiltAngle);
-                var curveValue = balanceCurve.Evaluate(normalisedTiltAngle);
-                var balanceForceOut = math.lerp(minBalanceForce, maxBalanceForce, curveValue);
-                if (enableDebug) { Debug.Log($"Balance Component : Balance force is {balanceForceOut}"); }
+                float normalisedTiltAngle = Mathf.InverseLerp(0, fallAngleThreshold, AbsoluteTiltAngle);
+                float curveValue = balanceCurve.Evaluate(normalisedTiltAngle);
+                float balanceForceOut = math.lerp(minBalanceForce, maxBalanceForce, curveValue);
+                if (enableDebug) Debug.Log($"Balance Component : Balance force is {balanceForceOut}");
 
                 return balanceForceOut;
             }
         }
 
         private void ApplyTorque(float power) {
-            var torque = balancePivotPoint * power;
-            var torquePosition = transform.position + balancePivotOffset;
-            var finalTorque = torque + torquePosition;
-            _rigidBody.AddTorque(finalTorque, ForceMode.Impulse);
+            Vector3 torque = balancePivotPoint * power;
+            Vector3 torquePosition = transform.position + balancePivotOffset;
+            Vector3 finalTorque = torque + torquePosition;
+            _character.RigidBody.AddTorque(finalTorque, ForceMode.Impulse);
             if (!enableDebug) return;
             Debug.Log($"Balance Component : Applied {finalTorque} units of torque.");
         }
 
-        private bool HasFallenOver() {
-            return AbsoluteTiltAngle > fallAngleThreshold;
-        }
+        private bool HasFallenOver() =>
+            AbsoluteTiltAngle > fallAngleThreshold
+            || _character.RigidBody.transform.position.x
+            >= -_character.gameManagerAnchor.Value.BlockWidth / 2 + _character.bikeWidth
+            || _character.RigidBody.transform.position.x
+            <= _character.gameManagerAnchor.Value.BlockWidth / 2 - _character.bikeWidth;
 
         private float AbsoluteTiltAngle =>
             Math.Abs(Vector3.Angle(Vector3.up, transform.up)); //provides absolute angle only.
@@ -109,11 +112,12 @@ namespace QWOPCycle.Gameplay {
                 : transform.eulerAngles.z; //Provides negative and positive angles.
 
 #endregion
-        #region Fixed Updates
+
+#region Fixed Updates
 
         private void FixedUpdate() {
-            if (HasFallenOver() && _canMove) { HandleFellOver(); }
-            if (_canMove) { ApplySteeringForce(); }
+            if (HasFallenOver() && CanMove) HandleFellOver();
+            if (CanMove) ApplySteeringForce();
         }
 
         private void ApplySteeringForce() {
@@ -122,7 +126,7 @@ namespace QWOPCycle.Gameplay {
             float appliedSteeringForce = steeringForce * AbsoluteTiltAngle * steeringDirection * maxSpeedWhenTilting;
 
             //Apply the steering force | locked on the X axis only.
-            _rigidBody.AddForce(Vector3.right * appliedSteeringForce, ForceMode.Acceleration);
+            _character.RigidBody.AddForce(Vector3.right * appliedSteeringForce, ForceMode.Acceleration);
         }
 
 #endregion
