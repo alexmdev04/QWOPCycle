@@ -1,6 +1,7 @@
 ﻿using SideFX.Events;
 using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
+using Unity.Logging;
 using UnityEngine;
 
 namespace QWOPCycle.Scoring {
@@ -36,7 +37,10 @@ namespace QWOPCycle.Scoring {
 
 #region EventHandlers
 
-        private void OnScore(ScoreEvent e) => Score += e.Value;
+        private void OnScore(ScoreEvent e) {
+            Score += e.Value;
+            Log.Verbose("ScoreTracker : Score increased by {0}, new score: {1}", e.Value, Score);
+        }
 
         /// <summary>
         /// Reset score to 0 when gameplay starts
@@ -44,6 +48,7 @@ namespace QWOPCycle.Scoring {
         private void OnSceneReady(SceneReady e) {
             if (e.Scene is not GameplayScene) return;
 
+            Log.Verbose("ScoreTracker : Resetting");
             Score = 0;
             DistanceTravelled = 0f;
         }
