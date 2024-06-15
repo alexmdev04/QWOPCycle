@@ -1,23 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using SideFX.Anchors;
 using SideFX.Events;
 using SideFX.SceneManagement.Events;
 using Unity.Logging;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] ScrollingBlock scrollingBlockPrefab;
-    [SerializeField] int numOfScrollingBlocks = 3;
-    [SerializeField] float scrollingBlockLength = 5f;
-    ScrollingBlock[] scrollingBlocks;
-    [SerializeField] float moveBlockDistance = 0.1f;
-    float lastBlockStartingZ;
-    bool scrollingBlocksReady;
+    [SerializeField] GameObject blockPrefab;
+    [SerializeField] [Tooltip("This value is only used in Start()")] int numOfBlocksToCreate = 7;
+    [SerializeField] [Tooltip("In meters")] float blockLength = 5f;
+    [SerializeField] [Tooltip("In meters per second")] float blockMoveDistance = 10f;
+
+    GameObject[] blocks;
+    int
+        blockMovedIndex,
+        blocksTotal;
+    float
+        blockMoveToFrontThreshhold,
+        blockMoveDistanceOld;
+    bool
+        blocksReady;
 
     EventBinding<SceneReady> _sceneReadyBinding;
 
@@ -30,55 +32,74 @@ public class GameManager : MonoBehaviour
     }
     void OnSceneReady(SceneReady e)
     {
-        for (int i = 0; i < numOfScrollingBlocks; i++)
-        {
-            ScrollingBlock scrollingBlockNew = Instantiate(scrollingBlockPrefab);
-            scrollingBlockNew.name = "ScrollingBlock" + (i + 1);
-            float scrollingBlockNewStartingZ = scrollingBlockLength * i;
-            scrollingBlockNew.transform.position = new Vector3(
-                scrollingBlockNew.transform.position.x,
-                scrollingBlockNew.transform.position.y,
-                scrollingBlockNewStartingZ);
-            scrollingBlockNew.scrollingBlockStartingZ = scrollingBlockNewStartingZ;
-            scrollingBlocks[i] = scrollingBlockNew;
-        }
-        lastBlockStartingZ = scrollingBlocks[^1].scrollingBlockStartingZ;
-        scrollingBlocksReady = true;
+        BlocksInitialize();
     }
     void Start()
     {
-        scrollingBlocks = new ScrollingBlock[numOfScrollingBlocks];
+        blocks = new GameObject[numOfBlocksToCreate];
+        blockMovedIndex = numOfBlocksToCreate - 1;
     }
-    void FixedUpdate()
+    void Update()
     {
-        if (!scrollingBlocksReady) { return; }
-        BlockSwap();
-        MoveBlocks();
+        if (!blocksReady) { return; }
+        if (blockMoveDistanceOld != blockMoveDistance)
+        { // this prevents misalignment from editing moveBlockDistance at runtime
+            blockMoveDistanceOld = blockMoveDistance;
+            BlocksResetPositions();
+        }
+        BlocksMoveToFrontCheck();
+        BlocksScroll();
     }
-    void MoveBlocks()
+    /// <summary>
+    /// Instantiates all blocks and sets values
+    /// </summary>
+    void BlocksInitialize()
     {
-        if (Keyboard.current.downArrowKey.isPressed)
+        for (int i = 0; i < numOfBlocksToCreate; i++)
         {
-            foreach (ScrollingBlock scrollingBlock in scrollingBlocks)
+            GameObject blockNew = Instantiate(blockPrefab);
+            blockNew.name = "block" + (i + 1);
+            blockNew.transform.position = blockNew.transform.position.With(z: blockLength * i);
+            blocks[i] = blockNew;
+        }
+        blocksTotal = numOfBlocksToCreate;
+        blockMoveToFrontThreshhold = 0f - blockLength;
+        blocksReady = true;
+    }
+    /// <summary>
+    /// Moves all blocks towards the player by ScrollBlockDistance(). if the value alters during runtime, reset all block positions
+    /// </summary>
+    void BlocksScroll()
+    {
+        foreach (GameObject scrollingBlock in blocks)
+        {
+            scrollingBlock.transform.position = scrollingBlock.transform.position.With(z: scrollingBlock.transform.position.z - (blockMoveDistance * Time.deltaTime));
+        }
+    }
+    /// <summary>
+    /// If the block's Z is beyond or equal to the threshold, move it in front of the most recently moved block
+    /// </summary>
+    void BlocksMoveToFrontCheck()
+    {
+        foreach (GameObject scrollingBlock in blocks)
+        {
+            if (scrollingBlock.transform.position.z <= blockMoveToFrontThreshhold)
             {
-                scrollingBlock.transform.position = new Vector3(
-                    scrollingBlock.transform.position.x,
-                    scrollingBlock.transform.position.y,
-                    scrollingBlock.transform.position.z - moveBlockDistance);
+                scrollingBlock.transform.position = scrollingBlock.transform.position.With(z: blocks[blockMovedIndex].transform.position.z + blockLength);
+                blockMovedIndex++;
+                if (blockMovedIndex >= blocksTotal) { blockMovedIndex = 0; }
             }
         }
     }
-    void BlockSwap()
+    /// <summary>
+    /// Resets all blocks to starting positions
+    /// </summary>
+    void BlocksResetPositions()
     {
-        foreach (ScrollingBlock scrollingBlock in scrollingBlocks)
+        blockMovedIndex = blocksTotal - 1;
+        for (int i = 0; i < blocks.Length; i++)
         {
-            if (scrollingBlock.BlockSwapCheck())
-            {
-                scrollingBlock.transform.position = new Vector3(
-                    scrollingBlock.transform.position.x,
-                    scrollingBlock.transform.position.y,
-                    lastBlockStartingZ);
-            }
+            blocks[i].transform.position = blocks[i].transform.position.With(z: blockLength * i);
         }
     }
 }

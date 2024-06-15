@@ -219,11 +219,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a107ef11940ad84a93f4cf1f6198260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollingBlockPrefab: {fileID: 6411611446405130678, guid: 17e4e3aebd516df4fbcbf2528212064e,
+  blockPrefab: {fileID: 8455101753468990390, guid: 17e4e3aebd516df4fbcbf2528212064e,
     type: 3}
-  numOfScrollingBlocks: 3
-  scrollingBlockLength: 5
-  moveBlockDistance: 0.1
+  numOfBlocksToCreate: 7
+  blockLength: 5
+  blockMoveDistance: 10
 --- !u!4 &91900217
 Transform:
   m_ObjectHideFlags: 0
