@@ -16,6 +16,7 @@ namespace QWOPCycle.Scoring {
     [CreateAssetMenu(fileName = "ScoreTracker", menuName = "QWOPCycle/ScoreTracker")]
     public sealed class ScoreTracker : ScriptableObject {
         public uint Score { get; private set; }
+        public float DistanceTravelled { get; private set; }
 
         private EventBinding<ScoreEvent> _scoreBinding;
         private EventBinding<SceneReady> _sceneReadyBinding;
@@ -31,6 +32,8 @@ namespace QWOPCycle.Scoring {
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
         }
 
+        public void AddDistance(float distance) => DistanceTravelled += distance;
+
 #region EventHandlers
 
         private void OnScore(ScoreEvent e) => Score += e.Value;
@@ -39,7 +42,10 @@ namespace QWOPCycle.Scoring {
         /// Reset score to 0 when gameplay starts
         /// </summary>
         private void OnSceneReady(SceneReady e) {
-            if (e.Scene is GameplayScene) Score = 0;
+            if (e.Scene is not GameplayScene) return;
+
+            Score = 0;
+            DistanceTravelled = 0f;
         }
 
 #endregion
