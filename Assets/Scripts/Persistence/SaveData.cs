@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using QWOPCycle.Scoring;
+using Unity.Logging;
 using UnityEngine;
 
 namespace QWOPCycle.Persistence {
@@ -14,8 +15,11 @@ namespace QWOPCycle.Persistence {
         public static SaveData Load() {
             string filepath = Path.Combine(Application.persistentDataPath, FILENAME);
             if (!File.Exists(filepath)) {
+                Log.Info("Creating new Save File");
+
                 var data = new SaveData();
                 data.Save();
+
                 return data;
             }
 

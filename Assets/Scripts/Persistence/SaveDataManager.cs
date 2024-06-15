@@ -38,12 +38,12 @@ namespace QWOPCycle.Persistence {
         }
 
         private void OnSaveGame() {
-            Log.Debug("Saving game data");
+            Log.Debug("SaveDataManager : Saving Player Data");
             Save.Save();
         }
 
         private void OnSaveSettings() {
-            Log.Debug("Saving settings");
+            Log.Debug("SaveDataManager : Saving Settings");
             Settings.Save();
         }
     }
