@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using QWOPCycle.Scoring;
 using Unity.Logging;
 using UnityEngine;
 
@@ -9,8 +8,9 @@ namespace QWOPCycle.Persistence {
     public sealed class SaveData {
         private const string FILENAME = "save.data";
 
-        public uint HighScore { get; private set; }
-        public float BestDistance { get; private set; }
+        [field: SerializeField] public uint HighScore { get; private set; }
+
+        [field: SerializeField] public float BestDistance { get; private set; }
 
         public static SaveData Load() {
             string filepath = Path.Combine(Application.persistentDataPath, FILENAME);
@@ -33,10 +33,10 @@ namespace QWOPCycle.Persistence {
             File.WriteAllText(Path.Combine(Application.persistentDataPath, FILENAME), json);
         }
 
-        public bool PostScore(ScoreTracker score) {
-            if (score.Score <= HighScore) return false;
+        public bool PostScore(uint score) {
+            if (score <= HighScore) return false;
 
-            HighScore = score.Score;
+            HighScore = score;
             Save();
             return true;
         }
