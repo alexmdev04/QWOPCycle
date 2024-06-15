@@ -14,12 +14,17 @@ namespace QWOPCycle.Persistence {
     public readonly struct SaveSettingsEvent : IEvent { }
 
     public sealed class SaveDataManager : MonoBehaviour {
+        public static SaveDataManager Instance;
         public SaveData Save { get; private set; }
         public GameSettings Settings { get; private set; }
 
-
         private EventBinding<SaveGameEvent> _saveGameBinding;
         private EventBinding<SaveSettingsEvent> _saveSettingsBinding;
+
+        private void Awake() {
+            if (Instance == null) Instance = this;
+            else Destroy(this);
+        }
 
         private void OnEnable() {
             Save = SaveData.Load();
