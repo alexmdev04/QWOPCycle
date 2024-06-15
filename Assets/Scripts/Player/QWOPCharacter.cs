@@ -32,17 +32,16 @@ namespace QWOPCycle.Gameplay {
 #endregion
         #region Initialisation
 
-        void Awake() {
-            SetupPlayer();
-        }
-
-        private void SetupPlayer() {
+        private void Awake() {
             RigidBody = GetComponent<Rigidbody>();
             BalanceComponent = GetComponent<BalanceComponent>();
+            SteerComponent = GetComponent<SteerComponent>();
+        }
+
+        private void Start() {
+            SteerComponent.SetCharacter(this);
             BalanceComponent.SetCharacter(this);
             BalanceComponent.CanMove = canMove;
-            SteerComponent = GetComponent<SteerComponent>();
-            SteerComponent.SetCharacter(this);
         }
 
 #endregion
