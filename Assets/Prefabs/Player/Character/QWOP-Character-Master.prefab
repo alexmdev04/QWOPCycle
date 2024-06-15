@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 2739423877440308546}
   - component: {fileID: 511814055928131039}
   - component: {fileID: 6630832230676273296}
-  - component: {fileID: 8053862053522428911}
   - component: {fileID: 2726762808373807969}
+  - component: {fileID: 8053862053522428911}
+  - component: {fileID: 5167717302553066724}
   m_Layer: 0
   m_Name: QWOP-Character-Master
   m_TagString: Untagged
@@ -84,6 +85,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 58
   m_CollisionDetection: 0
+--- !u!114 &2726762808373807969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773244771783748607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 219fbd7386027fe448c5bd84c9f51da7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputReader: {fileID: 11400000, guid: a02f275e462a1ef44a97b48019331bc4, type: 2}
+  canMove: 1
 --- !u!114 &8053862053522428911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,7 +161,7 @@ MonoBehaviour:
   steeringForce: 1
   maxSpeedWhenTilting: 0.5
   enableDebug: 0
---- !u!114 &2726762808373807969
+--- !u!114 &5167717302553066724
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,11 +170,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 773244771783748607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 219fbd7386027fe448c5bd84c9f51da7, type: 3}
+  m_Script: {fileID: 11500000, guid: 355d2a56be11b454c9302d4038f5fd84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputReader: {fileID: 11400000, guid: a02f275e462a1ef44a97b48019331bc4, type: 2}
-  canMove: 1
+  steeringMultiplier: 0.0001
+  _canMove: 1
 --- !u!1 &1749882630627505056
 GameObject:
   m_ObjectHideFlags: 0
