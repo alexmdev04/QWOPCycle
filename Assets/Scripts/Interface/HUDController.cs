@@ -1,4 +1,7 @@
+using QWOPCycle.Persistence;
 using QWOPCycle.Scoring;
+using SideFX.Events;
+using SideFX.SceneManagement.Events;
 using Unity.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,8 +15,7 @@ namespace QWOPCycle.Interface {
         private Label _scoreLabel;
 
         [SerializeField] private ScoreTracker _scoreTracker;
-
-        private string CurrentScore => _scoreTracker.Score.ToString("#.#");
+        private EventBinding<SceneReady> _sceneReadyBinding;
 
         private void Awake() {
             _doc = GetComponent<UIDocument>();
@@ -29,11 +31,23 @@ namespace QWOPCycle.Interface {
             }
         }
 
+        private void OnEnable() {
+            _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
+            EventBus<SceneReady>.Register(_sceneReadyBinding);
+        }
+
+        private void OnDisable() {
+            EventBus<SceneReady>.Deregister(_sceneReadyBinding);
+        }
+
         private void LateUpdate() {
             _currentDistanceLabel.text = $"{_scoreTracker.DistanceTravelled:N1}m";
-            // _bestDistanceLabel.text = _scoreTracker.BestDistance.ToString();
-            _scoreLabel.text = _scoreTracker.Score.ToString();
-            // _doc.rootVisualElement.MarkDirtyRepaint();
+            _scoreLabel.text = $"{_scoreTracker.Score} points";
+        }
+
+        private void OnSceneReady() {
+            float bestDistance = SaveDataManager.Instance.Save.BestDistance;
+            _bestDistanceLabel.text = $"Best Distance: {bestDistance:N1}m";
         }
     }
 }
