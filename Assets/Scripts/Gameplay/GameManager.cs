@@ -4,6 +4,11 @@ using Unity.Logging;
 using UnityEngine;
 
 namespace QWOPCycle.Gameplay {
+    public readonly struct GameOverEvent : IEvent {
+        public readonly uint Score;
+        public readonly float Distance;
+    }
+
     public sealed class GameManager : MonoBehaviour {
         [field: Header("Track Blocks")]
         [field: SerializeField]
