@@ -7,7 +7,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 namespace QWOPCycle.Scoring {
-    public sealed class PedalPowerTracker : MonoBehaviour {
+    public sealed class PedalTracker : ScriptableObject {
         [field: SerializeField] public float PedalPower { get; private set; }
         public float MaxPedalPower => _maxPedalPower;
 
@@ -19,16 +19,20 @@ namespace QWOPCycle.Scoring {
         [SerializeField] private float _pedalPowerIncrement = 1f;
         [SerializeField] private float _pedalPowerDecay = 0.1f;
         [SerializeField] private float _maxPedalPower = 10f;
-        [SerializeField] private InputReader _input;
 
         private bool _gameIsRunning;
         private EventBinding<SceneReady> _sceneReadyBinding;
+        private InputReader _input;
         private PedalState _state = PedalState.None;
 
         private enum PedalState {
             None, // Used when the game starts, so the player can start with either pedal
             Left,
             Right,
+        }
+
+        private void Awake() {
+            _input = CreateInstance<InputReader>();
         }
 
 
@@ -46,11 +50,9 @@ namespace QWOPCycle.Scoring {
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
         }
 
-        private void FixedUpdate() {
-            if (_gameIsRunning && PedalPower > 0f) {
-                PedalPower -= _pedalPowerDecay * Time.fixedDeltaTime;
-                PedalPower = math.clamp(PedalPower, 0f, _maxPedalPower);
-            }
+        public void Tick(float deltaTime) {
+            PedalPower -= _pedalPowerDecay * Time.fixedDeltaTime;
+            PedalPower = math.clamp(PedalPower, 0f, _maxPedalPower);
         }
 
         private void OnSceneReady(SceneReady e) {
