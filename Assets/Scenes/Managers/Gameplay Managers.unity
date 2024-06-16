@@ -223,7 +223,7 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: a8d4798b29c48f442b13bbb6df1f4ce6,
     type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 100
 --- !u!4 &558472973
 Transform:
   m_ObjectHideFlags: 0
