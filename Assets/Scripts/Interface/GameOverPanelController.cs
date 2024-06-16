@@ -83,7 +83,7 @@ namespace QWOPCycle.Interface {
         private void OnRestartClicked() {
             Log.Debug("GameOver Interface : Restart clicked");
             EventBus<GameReset>.Raise(default);
-            _doc.enabled = false;
+            _doc.rootVisualElement.visible = false;
         }
 
         private void OnQuitClicked() {
