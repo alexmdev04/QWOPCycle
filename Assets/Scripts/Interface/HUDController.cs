@@ -12,7 +12,7 @@ namespace QWOPCycle.Interface {
         private Label _bestDistanceLabel;
         private Label _scoreLabel;
         private Button _tutorialButton;
-        private VisualElement _tutorialPanel;
+        private Button _tutorialPanel;
         private bool _showTutorial;
 
         [SerializeField] private ScoreTracker _scoreTracker;
@@ -33,11 +33,14 @@ namespace QWOPCycle.Interface {
 
         private void OnEnable() {
             _tutorialButton = _doc.rootVisualElement.Q<Button>("tutorial-button");
+            _tutorialPanel = _doc.rootVisualElement.Q<Button>("tutorial-panel");
             _tutorialButton.clicked += ToggleTutorialPanel;
+            _tutorialPanel.clicked += ToggleTutorialPanel;
         }
 
         private void OnDisable() {
             _tutorialButton.clicked -= ToggleTutorialPanel;
+            _tutorialPanel.clicked -= ToggleTutorialPanel;
         }
 
         private void LateUpdate() {
