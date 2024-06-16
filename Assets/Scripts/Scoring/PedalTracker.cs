@@ -9,7 +9,18 @@ using UnityEngine;
 namespace QWOPCycle.Scoring {
     [CreateAssetMenu(fileName = "PedalTracker", menuName = "QWOPCycle/PedalTracker")]
     public sealed class PedalTracker : ScriptableObject {
-        [field: SerializeField] public float PedalPower { get; private set; }
+        [field: SerializeField]
+        [field: Range(0f, 10f)]
+        public float PedalPower { get; private set; }
+
+        [SerializeField] private float _pedalPowerIncrement = 1f;
+        [SerializeField] private float _pedalPowerDecay = 0.1f;
+        [SerializeField] private float _maxPedalPower = 10f;
+        [SerializeField] private InputReader _input;
+
+        private bool _gameIsRunning;
+        private EventBinding<SceneReady> _sceneReadyBinding;
+        private PedalState _state = PedalState.None;
         public float MaxPedalPower => _maxPedalPower;
 
         /// <summary>
@@ -17,22 +28,13 @@ namespace QWOPCycle.Scoring {
         /// </summary>
         public float PedalPowerRatio => PedalPower / _maxPedalPower;
 
-        [SerializeField] private float _pedalPowerIncrement = 1f;
-        [SerializeField] private float _pedalPowerDecay = 0.1f;
-        [SerializeField] private float _maxPedalPower = 10f;
-
-        private bool _gameIsRunning;
-        private EventBinding<SceneReady> _sceneReadyBinding;
-        private InputReader _input;
-        private PedalState _state = PedalState.None;
-
         private enum PedalState {
             None, // Used when the game starts, so the player can start with either pedal
             Left,
             Right,
         }
-
         private void Awake() {
+            Log.Debug("[PedalTracker] Awake");
             _input = CreateInstance<InputReader>();
         }
 
@@ -59,11 +61,11 @@ namespace QWOPCycle.Scoring {
         private void OnSceneReady(SceneReady e) {
             if (e.Scene is GameplayScene) {
                 _gameIsRunning = true;
-                PedalPower = 0f;
-                Log.Debug("[PedalPowerTracker] Starting");
+                //PedalPower = 0f;
+                PedalPower = _maxPedalPower;
+                Log.Debug("[PedalTracker] Starting");
             }
         }
-
 
         private void OnPedalLeft() {
             if (_gameIsRunning && _state is not PedalState.Left) {
