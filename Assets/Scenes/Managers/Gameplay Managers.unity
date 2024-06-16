@@ -304,7 +304,7 @@ MonoBehaviour:
   _scoreTracker: {fileID: 11400000, guid: 4ced42be744e7794b9aadbe719aa2336, type: 2}
   _pedalTracker: {fileID: 11400000, guid: 9236c958fc54d074897948a9d585ff48, type: 2}
   warningBaseColor: {r: 0, g: 1, b: 1, a: 1}
-  warningVisiblePercent: 0.4
+  warningVisiblePercent: 0.6
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
