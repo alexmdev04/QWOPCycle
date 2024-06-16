@@ -22,8 +22,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4ced42be744e7794b9aadbe719aa2336
-    m_Address: Assets/ScriptableObjects/Gameplay/ScoreTracker.asset
+  - m_GUID: fe31a5d17df8d854d8887c5c179f836c
+    m_Address: Assets/ScriptableObjects/Anchors
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c8895ee128a0cd4bb36d3d5953edd41
+    m_Address: Assets/ScriptableObjects/Gameplay
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -16,7 +16,12 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: e2c23c432099a1f47ab910e8f5302103
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 9236c958fc54d074897948a9d585ff48
+    m_Address: Assets/ScriptableObjects/Gameplay/PedalTracker.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 73a9143145236ab4fb15acbe5d3d60bc, type: 2}
   m_SchemaSet:
