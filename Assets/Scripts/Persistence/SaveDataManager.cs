@@ -35,6 +35,8 @@ namespace QWOPCycle.Persistence {
         }
 
         private void OnDisable() {
+            Save.Save();
+            Settings.Save();
             EventBus<GameOverEvent>.Deregister(_gameOverBinding);
         }
 
