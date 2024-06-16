@@ -8,6 +8,7 @@ namespace QWOPCycle.Interface {
     [RequireComponent(typeof(UIDocument))]
     public sealed class HUDController : MonoBehaviour {
         private UIDocument _doc;
+        private Label _runTimeLabel;
         private Label _currentDistanceLabel;
         private Label _bestDistanceLabel;
         private Label _scoreLabel;
@@ -22,6 +23,7 @@ namespace QWOPCycle.Interface {
             _currentDistanceLabel = _doc.rootVisualElement.Q<Label>("current-distance");
             _bestDistanceLabel = _doc.rootVisualElement.Q<Label>("best-distance");
             _scoreLabel = _doc.rootVisualElement.Q<Label>("score");
+            _runTimeLabel = _doc.rootVisualElement.Q<Label>("run-time");
         }
 
         private void Start() {
@@ -50,6 +52,7 @@ namespace QWOPCycle.Interface {
                                      ? SaveDataManager.Instance.Save.BestDistance
                                      : _scoreTracker.DistanceTravelled;
             _bestDistanceLabel.text = $"Best Distance: {bestDistance:N1}m";
+            _runTimeLabel.text = $@"Run Time: {_scoreTracker.RunTime:mm\:ss}";
         }
 
         private void ToggleTutorialPanel() {
