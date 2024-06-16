@@ -23,6 +23,8 @@ namespace QWOPCycle.Gameplay {
         [SerializeField] [Tooltip("This value is only used in Start()")]
         private int blocksNumToCreate = 7;
 
+        [Tooltip("")] public int blockLanes = 4;
+
         [SerializeField] [Tooltip("In meters per second")]
         private float minTrackSpeed = 1f;
 
@@ -48,6 +50,7 @@ namespace QWOPCycle.Gameplay {
 
         public float BlockLength { get; private set; }
         public float BlockWidth { get; private set; }
+        public float BlockLaneWidth { get; private set; }
 
         private GameState _gameState = GameState.Building;
 
@@ -57,8 +60,9 @@ namespace QWOPCycle.Gameplay {
 
         private void Start() {
             _blocks = new Block[blocksNumToCreate];
-            BlockWidth = blockPrefab.transform.localScale.x;
             BlockLength = blockPrefab.transform.localScale.z;
+            BlockWidth = blockPrefab.transform.localScale.x;
+            BlockLaneWidth = BlockWidth / blockLanes;
             _blockMovedIndex = blocksNumToCreate - 1;
         }
 
@@ -94,6 +98,7 @@ namespace QWOPCycle.Gameplay {
         private void OnSceneReady(SceneReady e) {
             if (e.Scene is not GameplayScene) return;
             BlocksInitialize();
+            foreach (Block block in _blocks) { block.obstacles = block.CreateRandomObstacles(); }
             EventBus<StartGameEvent>.Raise(default);
         }
 

@@ -9,14 +9,17 @@ namespace QWOPCycle.Gameplay {
         public Obstacle obstaclePrefab;
         public GameManagerAnchor gameManagerAnchor;
         public List<Obstacle> obstacles;
+        public double laneObstacleSpawnChance = 0.2f; // max value is 1
+        public float obstacleCenterDistanceVariance = 0.2f; // max value is 0.5,
+        public int emptyLanes = 1;
+
         private Random _random;
+
         private double random0to1 => _random.NextDouble();
 
         private void Awake() {
             _random = new Random();
         }
-
-        private void Start() { }
 
         private void Update() {
             if (Keyboard.current.spaceKey.wasPressedThisFrame) obstacles = CreateRandomObstacles();
@@ -27,29 +30,24 @@ namespace QWOPCycle.Gameplay {
         /// trackSpawnChance is a percentage out of 100 to spawn in a single track,
         /// there must always be at least one track without an obstacle
         /// </summary>
-        /// <param name="lanes"></param>
-        /// <param name="laneObstacleSpawnChance"></param>
-        /// <param name="emptyLanes"></param>
-        private List<Obstacle> CreateRandomObstacles(
-            int lanes = 4,
-            double laneObstacleSpawnChance = 0.2f, // max value is 1
-            float obstacleDistanceVariance = 0.2f, // max value is 0.5,
-            // the area of the block from the center, forwards and backwards, where the block could be randomly placed
-            int emptyLanes = 1
-        ) {
-            var lanesWithObstacles = 0;
+        public List<Obstacle> CreateRandomObstacles() {
+            int lanesWithObstacles = 0;
             float leftOfBlock = 0f - gameManagerAnchor.Value.BlockWidth / 2;
-            float laneWidth = gameManagerAnchor.Value.BlockWidth / lanes;
-            var newObstacles = new List<Obstacle>();
-            for (var i = 0; i < lanes; i++) {
-                if (lanesWithObstacles >= lanes - emptyLanes)
-                    // max filled lanes reached
-                    break;
+            List<Obstacle> newObstacles = new List<Obstacle>();
+            for (int i = 0; i < gameManagerAnchor.Value.blockLanes; i++) {
+                if (lanesWithObstacles >= gameManagerAnchor.Value.blockLanes - emptyLanes)
+                    break; // max filled lanes reached
                 double laneObstacleSpawnValue = random0to1;
-                if (laneObstacleSpawnValue <= laneObstacleSpawnChance) {
-                    newObstacles.Add(SpawnObstacle(i, laneWidth, leftOfBlock, obstacleDistanceVariance));
-                    lanesWithObstacles++;
-                }
+                if (laneObstacleSpawnValue > laneObstacleSpawnChance) continue;
+                newObstacles.Add(
+                    SpawnObstacle(
+                        i,
+                        gameManagerAnchor.Value.BlockLaneWidth,
+                        leftOfBlock,
+                        obstacleCenterDistanceVariance
+                    )
+                );
+                lanesWithObstacles++;
             }
 
             return newObstacles;
