@@ -133,7 +133,8 @@ namespace QWOPCycle.Gameplay {
 
             //Apply the steering force | locked on the X axis only.
             _character.RigidBody.AddForce(
-                Vector3.right * (appliedSteeringForce * (pedalTracker.MaxPedalPower - pedalTracker.PedalPower)),
+                Vector3.right
+                * (appliedSteeringForce * Math.Max(pedalTracker.MaxPedalPower - pedalTracker.PedalPower, 1f)),
                 ForceMode.Acceleration
             );
         }

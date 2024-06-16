@@ -11,13 +11,14 @@ using UnityEngine;
 namespace QWOPCycle.Scoring {
     [CreateAssetMenu(fileName = "PedalTracker", menuName = "QWOPCycle/PedalTracker")]
     public sealed class PedalTracker : ScriptableObject {
-        [field: SerializeField]
-        [field: Range(0f, 10f)]
+        [field: Range(0f, 1f)] public float debugPedalPowerRatio;
         public float PedalPower { get; private set; }
 
-        [SerializeField] private float _pedalPowerIncrement = 1f;
-        [SerializeField] private float _pedalPowerDecay = 0.1f;
-        [SerializeField] private float _maxPedalPower = 10f;
+        [Header("Starting (OnSceneReady) Values")] [SerializeField]
+        private float pedalPowerIncrement = 1f;
+
+        [SerializeField] private float pedalPowerDecay = 0.1f;
+        [SerializeField] private float maxPedalPower = 10f;
         [SerializeField] private float _levelIncreaseDecay = 0.2f;
         [SerializeField] private float _levelIncreaseMaxPower = 1f;
         [SerializeField] private InputReader _input;
@@ -26,6 +27,9 @@ namespace QWOPCycle.Scoring {
         private EventBinding<SceneReady> _sceneReadyBinding;
         private EventBinding<LevelIncreaseEvent> _levelIncreaseBinding;
         private PedalState _state = PedalState.None;
+        private float _pedalPowerIncrement = 1f;
+        private float _pedalPowerDecay = 0.1f;
+        private float _maxPedalPower = 10f;
         public float MaxPedalPower => _maxPedalPower;
 
         /// <summary>
@@ -64,6 +68,7 @@ namespace QWOPCycle.Scoring {
         }
 
         public void Tick(float deltaTime) {
+            debugPedalPowerRatio = PedalPowerRatio;
             PedalPower -= _pedalPowerDecay * deltaTime;
             PedalPower = math.clamp(PedalPower, 0f, _maxPedalPower);
         }
@@ -71,8 +76,10 @@ namespace QWOPCycle.Scoring {
         private void OnSceneReady(SceneReady e) {
             if (e.Scene is GameplayScene) {
                 _gameIsRunning = true;
-                //PedalPower = 0f;
                 PedalPower = _maxPedalPower;
+                _pedalPowerDecay = pedalPowerDecay;
+                _pedalPowerIncrement = pedalPowerIncrement;
+                _maxPedalPower = maxPedalPower;
                 Log.Debug("[PedalTracker] Starting");
             }
         }
