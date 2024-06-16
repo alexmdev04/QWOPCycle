@@ -43,14 +43,14 @@ namespace QWOPCycle.Scoring {
         }
 
         public void AddDistance(float distance) {
-            if (!_shouldTrack) return;
+            if (!_isGameRunning) return;
             DistanceTravelled += distance;
         }
 
 #region EventHandlers
 
         private void OnScore(ScoreEvent e) {
-            if (!_shouldTrack) return;
+            if (!_isGameRunning) return;
             Score += e.Value;
             Log.Verbose("ScoreTracker : Score increased by {0}, new score: {1}", e.Value, Score);
         }
