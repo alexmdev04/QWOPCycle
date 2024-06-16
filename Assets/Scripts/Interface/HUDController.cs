@@ -1,3 +1,4 @@
+using System;
 using QWOPCycle.Gameplay;
 using QWOPCycle.Persistence;
 using QWOPCycle.Scoring;
@@ -22,6 +23,7 @@ namespace QWOPCycle.Interface {
         private float _warningLerpValue;
         private bool _warningLerpUp;
         private float _levelIncreaseLabelTimer;
+        private ProgressBar _pedalPowerBar;
 
         private EventBinding<LevelIncreaseEvent> _levelIncreaseBinding;
 
@@ -43,6 +45,7 @@ namespace QWOPCycle.Interface {
             _warningLabel = _doc.rootVisualElement.Q<Label>("warning");
             _runTimeLabel = _doc.rootVisualElement.Q<Label>("run-time");
             _levelIncreaseLabel = _doc.rootVisualElement.Q<Label>("level-increase");
+            _pedalPowerBar = _doc.rootVisualElement.Q<ProgressBar>("pedal-power");
         }
 
         private void Start() {
@@ -78,6 +81,7 @@ namespace QWOPCycle.Interface {
             float bestDistance = Mathf.Max(SaveDataManager.Instance.Save.BestDistance, _scoreTracker.DistanceTravelled);
             _bestDistanceLabel.text = $"Best Distance: {bestDistance:N1}m";
             _runTimeLabel.text = $@"{_scoreTracker.RunTime:mm\:ss}";
+            _pedalPowerBar.value = _pedalTracker.PedalPowerRatio;
 
             WarningLabelTick();
             LevelIncreaseLabelTick();
