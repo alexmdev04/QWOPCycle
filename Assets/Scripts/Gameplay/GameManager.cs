@@ -7,6 +7,8 @@ using SideFX.SceneManagement.Events;
 using UnityEngine;
 
 namespace QWOPCycle.Gameplay {
+    public readonly struct StartGameEvent : IEvent { }
+
     public readonly struct GameOverEvent : IEvent {
         public uint Score { get; init; }
         public float Distance { get; init; }
@@ -92,6 +94,7 @@ namespace QWOPCycle.Gameplay {
         private void OnSceneReady(SceneReady e) {
             if (e.Scene is not GameplayScene) return;
             BlocksInitialize();
+            EventBus<StartGameEvent>.Raise(default);
         }
 
         private void OnPlayerFellOver() {
