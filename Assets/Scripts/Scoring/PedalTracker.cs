@@ -24,7 +24,7 @@ namespace QWOPCycle.Scoring {
         [SerializeField] private InputReader _input;
 
         private bool _gameIsRunning;
-        private EventBinding<SceneReady> _sceneReadyBinding;
+        private EventBinding<GameStart> _gameStartBinding;
         private EventBinding<LevelIncreaseEvent> _levelIncreaseBinding;
         private PedalState _state = PedalState.None;
         private float _pedalPowerIncrement = 1f;
@@ -53,8 +53,8 @@ namespace QWOPCycle.Scoring {
             _input.PedalLeftEvent += OnPedalLeft;
             _input.PedalRightEvent += OnPedalRight;
 
-            _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
-            EventBus<SceneReady>.Register(_sceneReadyBinding);
+            _gameStartBinding = new EventBinding<GameStart>(OnGameStart);
+            EventBus<GameStart>.Register(_gameStartBinding);
 
             _levelIncreaseBinding = new EventBinding<LevelIncreaseEvent>(OnLevelIncrease);
             EventBus<LevelIncreaseEvent>.Register(_levelIncreaseBinding);
@@ -63,7 +63,7 @@ namespace QWOPCycle.Scoring {
         private void OnDisable() {
             _input.PedalLeftEvent -= OnPedalLeft;
             _input.PedalRightEvent -= OnPedalRight;
-            EventBus<SceneReady>.Deregister(_sceneReadyBinding);
+            EventBus<GameStart>.Deregister(_gameStartBinding);
             EventBus<LevelIncreaseEvent>.Deregister(_levelIncreaseBinding);
         }
 
@@ -73,15 +73,13 @@ namespace QWOPCycle.Scoring {
             PedalPower = math.clamp(PedalPower, 0f, _maxPedalPower);
         }
 
-        private void OnSceneReady(SceneReady e) {
-            if (e.Scene is GameplayScene) {
-                _gameIsRunning = true;
-                PedalPower = _maxPedalPower;
-                _pedalPowerDecay = pedalPowerDecay;
-                _pedalPowerIncrement = pedalPowerIncrement;
-                _maxPedalPower = maxPedalPower;
-                Log.Debug("[PedalTracker] Starting");
-            }
+        private void OnGameStart(GameStart e) {
+            _gameIsRunning = true;
+            PedalPower = _maxPedalPower;
+            _pedalPowerDecay = pedalPowerDecay;
+            _pedalPowerIncrement = pedalPowerIncrement;
+            _maxPedalPower = maxPedalPower;
+            Log.Debug("[PedalTracker] Starting");
         }
 
         private void OnPedalLeft() {
