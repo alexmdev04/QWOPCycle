@@ -16,4 +16,4 @@ MonoBehaviour:
   _pedalPowerIncrement: 1
   _pedalPowerDecay: 2
   _maxPedalPower: 10
-  _input: {fileID: 0}
+  _input: {fileID: 11400000, guid: 990984dcffc886546b603c5d99af9444, type: 2}
