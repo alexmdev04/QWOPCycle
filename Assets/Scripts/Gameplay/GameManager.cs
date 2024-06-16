@@ -123,10 +123,8 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void OnGameReset() {
-            for (var i = 0; i < _blocks.Length; i++) {
-                _blocks[i].transform.position = _blocks[i].transform.position.With(z: BlockLength * i);
-                _blocks[i].DestroyObstacles();
-            }
+            BlocksResetPositions();
+            foreach (Block b in _blocks) b.DestroyObstacles();
         }
 
         private void OnPlayerFellOver() {
