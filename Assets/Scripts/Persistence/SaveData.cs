@@ -5,12 +5,16 @@ using UnityEngine;
 
 namespace QWOPCycle.Persistence {
     [Serializable]
-    public sealed class SaveData {
+    public struct SaveData {
         private const string FILENAME = "save.data";
 
         [field: SerializeField] public uint HighScore { get; private set; }
 
         [field: SerializeField] public float BestDistance { get; private set; }
+
+        [SerializeField] private double _bestRunTime;
+
+        public TimeSpan BestRunTime => TimeSpan.FromSeconds(_bestRunTime);
 
         public static SaveData Load() {
             string filepath = Path.Combine(Application.persistentDataPath, FILENAME);
@@ -27,26 +31,17 @@ namespace QWOPCycle.Persistence {
             return JsonUtility.FromJson<SaveData>(json);
         }
 
-
         public void Save() {
             string json = JsonUtility.ToJson(this);
             File.WriteAllText(Path.Combine(Application.persistentDataPath, FILENAME), json);
         }
 
-        public bool PostScore(uint score) {
-            if (score <= HighScore) return false;
 
-            HighScore = score;
+        public void Save(uint score, float distance, TimeSpan runTime) {
+            HighScore = score > HighScore ? score : HighScore;
+            BestDistance = distance > BestDistance ? distance : BestDistance;
+            _bestRunTime = runTime.TotalSeconds > _bestRunTime ? runTime.TotalSeconds : _bestRunTime;
             Save();
-            return true;
-        }
-
-        public bool PostDistance(float distance) {
-            if (distance <= BestDistance) return false;
-
-            BestDistance = distance;
-            Save();
-            return true;
         }
     }
 }
