@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace QWOPCycle.Gameplay {
     public class SteerComponent : MonoBehaviour {
-        public float steeringMultiplier = 0.001f;
+        public float steeringMultiplier = 0.1f;
         private bool _canMove = true;
         private QWOPCharacter _character;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
@@ -43,6 +43,10 @@ namespace QWOPCycle.Gameplay {
             _canMove = false;
             _character.RigidBody.constraints = (RigidbodyConstraints)48 + 8; // freeze rot x and y, freeze pos z
             //_character.RigidBody.velocity = _character.RigidBody.velocity.With(x: -PlayerXDelta);
+        }
+
+        public void DebugFreeze() {
+            steeringMultiplier = 0f;
         }
     }
 }
