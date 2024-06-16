@@ -1,5 +1,6 @@
 using System;
 using QWOPCycle.Player;
+using QWOPCycle.Scoring;
 using SideFX.Events;
 using Unity.Logging;
 using Unity.Mathematics;
@@ -12,6 +13,7 @@ namespace QWOPCycle.Gameplay {
 
         //public Rigidbody _rigidBody;
         private QWOPCharacter _character;
+        [SerializeField] private PedalTracker pedalTracker;
 
 #endregion
 
@@ -100,14 +102,13 @@ namespace QWOPCycle.Gameplay {
         private bool HasFallenOver() =>
             AbsoluteTiltAngle > fallAngleThreshold
             || _character.RigidBody.transform.position.x
-            <= -_character.gameManagerAnchor.Value.BlockWidth / 2 + _character.bikeWidth
+            <= -_character.gameManagerAnchor.Value.BlockWidth / 2 - _character.bikeWidth
             || _character.RigidBody.transform.position.x
-            >= _character.gameManagerAnchor.Value.BlockWidth / 2 - _character.bikeWidth;
+            >= _character.gameManagerAnchor.Value.BlockWidth / 2 + _character.bikeWidth;
 
         private float AbsoluteTiltAngle =>
             Math.Abs(Vector3.Angle(Vector3.up, transform.up)); //provides absolute angle only.
 
-        //public float TiltAngle => Vector3.Angle(Vector3.up, transform.up); //Provides negative and positive angles.
         public float TiltAngle =>
             transform.eulerAngles.z >= 180f
                 ? transform.eulerAngles.z - 360f
@@ -131,7 +132,10 @@ namespace QWOPCycle.Gameplay {
             float appliedSteeringForce = steeringForce * AbsoluteTiltAngle * steeringDirection * maxSpeedWhenTilting;
 
             //Apply the steering force | locked on the X axis only.
-            _character.RigidBody.AddForce(Vector3.right * appliedSteeringForce, ForceMode.Acceleration);
+            _character.RigidBody.AddForce(
+                Vector3.right * (appliedSteeringForce * (pedalTracker.MaxPedalPower - pedalTracker.PedalPower)),
+                ForceMode.Acceleration
+            );
         }
 
 #endregion

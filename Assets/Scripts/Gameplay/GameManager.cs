@@ -17,11 +17,13 @@ namespace QWOPCycle.Gameplay {
     public sealed class GameManager : MonoBehaviour {
         [SerializeField] private GameManagerAnchor anchor;
 
-        [Header("Track Blocks")]
-        [SerializeField] private GameObject blockPrefab;
+        [Header("Track Blocks")] [SerializeField]
+        private Block blockPrefab;
 
         [SerializeField] [Tooltip("This value is only used in Start()")]
         private int blocksNumToCreate = 7;
+
+        [Tooltip("")] public int blockLanes = 4;
 
         [SerializeField] [Tooltip("In meters per second")]
         private float minTrackSpeed = 1f;
@@ -37,7 +39,7 @@ namespace QWOPCycle.Gameplay {
             _blockMoveToFrontThreshold,
             _blockMoveDistanceOld;
 
-        private GameObject[] _blocks;
+        private Block[] _blocks;
 
         private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
@@ -48,6 +50,7 @@ namespace QWOPCycle.Gameplay {
 
         public float BlockLength { get; private set; }
         public float BlockWidth { get; private set; }
+        public float BlockLaneWidth { get; private set; }
 
         private GameState _gameState = GameState.Building;
 
@@ -56,9 +59,10 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void Start() {
-            _blocks = new GameObject[blocksNumToCreate];
-            BlockWidth = blockPrefab.transform.localScale.x;
+            _blocks = new Block[blocksNumToCreate];
             BlockLength = blockPrefab.transform.localScale.z;
+            BlockWidth = blockPrefab.transform.localScale.x;
+            BlockLaneWidth = BlockWidth / blockLanes;
             _blockMovedIndex = blocksNumToCreate - 1;
         }
 
@@ -94,6 +98,7 @@ namespace QWOPCycle.Gameplay {
         private void OnSceneReady(SceneReady e) {
             if (e.Scene is not GameplayScene) return;
             BlocksInitialize();
+            foreach (Block block in _blocks) { block.obstacles = block.CreateRandomObstacles(); }
             EventBus<StartGameEvent>.Raise(default);
         }
 
@@ -111,7 +116,7 @@ namespace QWOPCycle.Gameplay {
         /// </summary>
         private void BlocksInitialize() {
             for (var i = 0; i < blocksNumToCreate; i++) {
-                GameObject blockNew = Instantiate(blockPrefab);
+                Block blockNew = Instantiate(blockPrefab);
                 blockNew.name = "block" + (i + 1);
                 blockNew.transform.position = blockNew.transform.position.With(z: BlockLength * i);
                 _blocks[i] = blockNew;
@@ -127,9 +132,9 @@ namespace QWOPCycle.Gameplay {
         /// positions
         /// </summary>
         private void BlocksMove() {
-            foreach (GameObject scrollingBlock in _blocks) {
-                scrollingBlock.transform.position = scrollingBlock.transform.position.With(
-                    z: scrollingBlock.transform.position.z - GetTrackSpeed() * Time.deltaTime
+            foreach (Block block in _blocks) {
+                block.transform.position = block.transform.position.With(
+                    z: block.transform.position.z - GetTrackSpeed() * Time.deltaTime
                 );
             }
         }
@@ -138,14 +143,17 @@ namespace QWOPCycle.Gameplay {
         /// If the block's Z is beyond or equal to the threshold, move it in front of the most recently moved block
         /// </summary>
         private void BlocksMoveToFrontCheck() {
-            foreach (GameObject scrollingBlock in _blocks) {
-                if (scrollingBlock.transform.position.z > _blockMoveToFrontThreshold) continue;
-                scrollingBlock.transform.position = scrollingBlock.transform.position.With(
+            foreach (Block block in _blocks) {
+                if (block.transform.position.z > _blockMoveToFrontThreshold) continue;
+                block.transform.position = block.transform.position.With(
                     z: _blocks[_blockMovedIndex].transform.position.z + BlockLength
                 );
 
                 _blockMovedIndex++;
                 if (_blockMovedIndex >= _blocksNumCreated) _blockMovedIndex = 0;
+
+                block.DestroyObstacles();
+                block.obstacles = block.CreateRandomObstacles();
             }
         }
 

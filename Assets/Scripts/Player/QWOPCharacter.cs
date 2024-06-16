@@ -1,12 +1,13 @@
 using Assets.PlayerScripts;
 using SideFX.Anchors;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace QWOPCycle.Gameplay {
     [RequireComponent(typeof(BalanceComponent))]
     [RequireComponent(typeof(SteerComponent))]
     public class QWOPCharacter : MonoBehaviour {
-        #region System
+#region System
 
         [Header("Controller / Input Reader")] public InputReader inputReader;
         [Header("Game Manager")] public GameManagerAnchor gameManagerAnchor;
@@ -15,14 +16,16 @@ namespace QWOPCycle.Gameplay {
         public SteerComponent SteerComponent { get; private set; }
 
 #endregion
-        #region Vars
 
-        [Header("Settings")]
-        public bool canMove = true;
+#region Vars
+
+        [Header("Settings")] public bool canMove = true;
+
         public float bikeWidth = 0.05f;
 
 #endregion
-        #region Initialisation
+
+#region Initialisation
 
         private void Awake() {
             RigidBody = GetComponent<Rigidbody>();
@@ -36,8 +39,16 @@ namespace QWOPCycle.Gameplay {
             BalanceComponent.CanMove = canMove;
         }
 
+        private void Update() {
+            if (Keyboard.current.fKey.wasPressedThisFrame) {
+                SteerComponent.DebugFreeze();
+                RigidBody.constraints = RigidbodyConstraints.FreezeAll;
+            }
+        }
+
 #endregion
-        #region Bind/Unbind
+
+#region Bind/Unbind
 
         private void OnEnable() {
             BindController();

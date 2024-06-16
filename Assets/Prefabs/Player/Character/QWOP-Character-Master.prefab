@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39bb5e97aa2926648b86b9499e815e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pedalTracker: {fileID: 11400000, guid: 9236c958fc54d074897948a9d585ff48, type: 2}
   minBalanceForce: 7
   maxBalanceForce: 35
   balancePivotPoint: {x: 0, y: 0, z: 1}
@@ -176,7 +177,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   steeringMultiplier: 0.1
-  _canMove: 1
 --- !u!1 &1749882630627505056
 GameObject:
   m_ObjectHideFlags: 0
