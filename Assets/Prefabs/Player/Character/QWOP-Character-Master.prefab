@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219fbd7386027fe448c5bd84c9f51da7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputReader: {fileID: 11400000, guid: a02f275e462a1ef44a97b48019331bc4, type: 2}
+  inputReader: {fileID: 11400000, guid: 990984dcffc886546b603c5d99af9444, type: 2}
   gameManagerAnchor: {fileID: 11400000, guid: 0b2f2e744a886684b8a63380ea758f22, type: 2}
   canMove: 1
   bikeWidth: 0.05
