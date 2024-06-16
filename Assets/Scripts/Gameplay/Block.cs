@@ -66,5 +66,10 @@ namespace QWOPCycle.Gameplay {
             newObstacle.transform.parent = transform;
             return newObstacle;
         }
+
+        public void DestroyObstacles() {
+            foreach (Obstacle obstacle in obstacles) { Destroy(obstacle.gameObject); }
+            obstacles.Clear();
+        }
     }
 }

@@ -151,6 +151,9 @@ namespace QWOPCycle.Gameplay {
 
                 _blockMovedIndex++;
                 if (_blockMovedIndex >= _blocksNumCreated) _blockMovedIndex = 0;
+
+                block.DestroyObstacles();
+                block.obstacles = block.CreateRandomObstacles();
             }
         }
 
