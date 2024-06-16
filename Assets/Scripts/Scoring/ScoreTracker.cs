@@ -40,6 +40,7 @@ namespace QWOPCycle.Scoring {
         }
 
         public void Tick(float deltaTime) {
+            if (!_isGameRunning) return;
             Score += deltaTime * (DistanceTravelled / (float)RunTime.TotalSeconds);
         }
 
