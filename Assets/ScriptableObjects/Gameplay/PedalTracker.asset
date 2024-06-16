@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PedalPower>k__BackingField: 0
   _pedalPowerIncrement: 1
-  _pedalPowerDecay: 0.1
+  _pedalPowerDecay: 2
   _maxPedalPower: 10
+  _input: {fileID: 0}
