@@ -22,8 +22,8 @@ namespace QWOPCycle.Interface {
         private Button _restartButton;
         private Button _quitButton;
 
-        private EventBinding<StartGameEvent> _gameStartBinding;
-        private EventBinding<GameOverEvent> _gameOverBinding;
+        private EventBinding<GameStart> _gameStartBinding;
+        private EventBinding<GameOver> _gameOverBinding;
         private bool _hasNewBestScore;
 
         // label templates
@@ -49,31 +49,31 @@ namespace QWOPCycle.Interface {
             _restartButton.clicked += OnRestartClicked;
             _quitButton.clicked += OnQuitClicked;
 
-            _gameStartBinding = new EventBinding<StartGameEvent>(OnGameStart);
-            _gameOverBinding = new EventBinding<GameOverEvent>(OnGameOver);
-            EventBus<StartGameEvent>.Register(_gameStartBinding);
-            EventBus<GameOverEvent>.Register(_gameOverBinding);
+            _gameStartBinding = new EventBinding<GameStart>(OnGameStart);
+            _gameOverBinding = new EventBinding<GameOver>(OnGameOver);
+            EventBus<GameStart>.Register(_gameStartBinding);
+            EventBus<GameOver>.Register(_gameOverBinding);
         }
 
         private void OnDisable() {
             _restartButton.clicked -= OnRestartClicked;
             _quitButton.clicked -= OnQuitClicked;
 
-            EventBus<StartGameEvent>.Deregister(_gameStartBinding);
-            EventBus<GameOverEvent>.Deregister(_gameOverBinding);
+            EventBus<GameStart>.Deregister(_gameStartBinding);
+            EventBus<GameOver>.Deregister(_gameOverBinding);
         }
 
-        private void OnGameStart(StartGameEvent e) {
+        private void OnGameStart(GameStart e) {
             _doc.rootVisualElement.visible = false;
         }
 
-        private void OnGameOver(GameOverEvent e) {
+        private void OnGameOver(GameOver e) {
             SaveData save = SaveDataManager.Instance.Save;
 
             _hasNewBestScore = false;
 
             SetLabel(_distanceLabel, e.Distance, save.BestDistance, T_Distance);
-            SetLabel(_scoreLabel,  Math.Floor(e.Score), Math.Floor(save.HighScore), T_Score);
+            SetLabel(_scoreLabel, Math.Floor(e.Score), Math.Floor(save.HighScore), T_Score);
             SetLabel(_timeLabel, e.RunTime, save.BestRunTime, T_Time);
 
             _newBestLabel.visible = _hasNewBestScore;
@@ -82,7 +82,7 @@ namespace QWOPCycle.Interface {
 
         private void OnRestartClicked() {
             Log.Debug("GameOver Interface : Restart clicked");
-            EventBus<RestartGameEvent>.Raise(default);
+            EventBus<GameReset>.Raise(default);
             _doc.enabled = false;
         }
 

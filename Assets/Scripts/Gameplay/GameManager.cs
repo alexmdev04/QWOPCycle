@@ -9,11 +9,11 @@ using Unity.Logging;
 using UnityEngine;
 
 namespace QWOPCycle.Gameplay {
-    public readonly struct StartGameEvent : IEvent { }
+    public readonly struct GameStart : IEvent { }
 
-    public readonly struct RestartGameEvent : IEvent { }
+    public readonly struct GameReset : IEvent { }
 
-    public readonly struct GameOverEvent : IEvent {
+    public readonly struct GameOver : IEvent {
         public double Score { get; init; }
         public float Distance { get; init; }
         public TimeSpan RunTime { get; init; }
@@ -26,8 +26,8 @@ namespace QWOPCycle.Gameplay {
     public sealed class GameManager : MonoBehaviour {
         [SerializeField] private GameManagerAnchor anchor;
 
-        [Header("Track Blocks")] [SerializeField]
-        private Block blockPrefab;
+        [Header("Track Blocks")]
+        [SerializeField] private Block blockPrefab;
 
         [SerializeField] [Tooltip("This value is only used in Start()")]
         private int blocksNumToCreate = 7;
@@ -113,14 +113,14 @@ namespace QWOPCycle.Gameplay {
         private void OnSceneReady(SceneReady e) {
             if (e.Scene is not GameplayScene) return;
             BlocksInitialize();
-            foreach (Block block in _blocks) { block.obstacles = block.CreateRandomObstacles(); }
+            foreach (Block block in _blocks) block.obstacles = block.CreateRandomObstacles();
 
-            EventBus<StartGameEvent>.Raise(default);
+            EventBus<GameStart>.Raise(default);
         }
 
         private void OnPlayerFellOver() {
-            EventBus<GameOverEvent>.Raise(
-                new GameOverEvent {
+            EventBus<GameOver>.Raise(
+                new GameOver {
                     Score = _scoreTracker.Score,
                     Distance = _scoreTracker.DistanceTravelled,
                     RunTime = _scoreTracker.RunTime,
@@ -190,7 +190,7 @@ namespace QWOPCycle.Gameplay {
         private float GetTrackSpeed() => minTrackSpeed + _pedalTracker.PedalPowerRatio * maxSpeedBonus;
 
         private void LevelUpdate() {
-            if (System.Math.Floor(_scoreTracker.RunTime.TotalSeconds / levelLength) > LevelCurrent) {
+            if (Math.Floor(_scoreTracker.RunTime.TotalSeconds / levelLength) > LevelCurrent) {
                 LevelCurrent++;
                 Log.Debug("[GameManager] Level Increased to: " + LevelCurrent);
                 EventBus<LevelIncreaseEvent>.Raise(

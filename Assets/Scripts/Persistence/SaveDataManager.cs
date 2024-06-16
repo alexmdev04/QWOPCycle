@@ -18,7 +18,7 @@ namespace QWOPCycle.Persistence {
         public SaveData Save { get; private set; }
         public GameSettings Settings { get; private set; }
 
-        private EventBinding<GameOverEvent> _gameOverBinding;
+        private EventBinding<GameOver> _gameOverBinding;
 
         private void Awake() {
             if (Instance == null) Instance = this;
@@ -29,19 +29,19 @@ namespace QWOPCycle.Persistence {
             Save = SaveData.Load();
             Settings = GameSettings.Load();
 
-            _gameOverBinding = new EventBinding<GameOverEvent>(OnGameOver);
+            _gameOverBinding = new EventBinding<GameOver>(OnGameOver);
 
-            EventBus<GameOverEvent>.Register(_gameOverBinding);
+            EventBus<GameOver>.Register(_gameOverBinding);
         }
 
         private void OnDisable() {
             Save.Save();
             Settings.Save();
-            EventBus<GameOverEvent>.Deregister(_gameOverBinding);
+            EventBus<GameOver>.Deregister(_gameOverBinding);
         }
 
 
-        private void OnGameOver(GameOverEvent e) {
+        private void OnGameOver(GameOver e) {
             Save.Save(e.Score, e.Distance, e.RunTime);
         }
     }
