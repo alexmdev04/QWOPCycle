@@ -56,6 +56,7 @@ namespace QWOPCycle.Gameplay {
         private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
         private EventBinding<SceneReady> _sceneReadyBinding;
+        private EventBinding<GameReset> _gameResetBinding;
 
         [SerializeField] private ScoreTracker _scoreTracker;
         [SerializeField] private PedalTracker _pedalTracker;
@@ -100,14 +101,17 @@ namespace QWOPCycle.Gameplay {
         private void OnEnable() {
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
             _playerFellOverBinding = new EventBinding<PlayerFellOver>(OnPlayerFellOver);
+            _gameResetBinding = new EventBinding<GameReset>(OnGameReset);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Register(_playerFellOverBinding);
+            EventBus<GameReset>.Register(_gameResetBinding);
             anchor.Provide(this);
         }
 
         private void OnDisable() {
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Deregister(_playerFellOverBinding);
+            EventBus<GameReset>.Deregister(_gameResetBinding);
         }
 
         private void OnSceneReady(SceneReady e) {
@@ -116,6 +120,13 @@ namespace QWOPCycle.Gameplay {
             foreach (Block block in _blocks) block.obstacles = block.CreateRandomObstacles();
 
             EventBus<GameStart>.Raise(default);
+        }
+
+        private void OnGameReset() {
+            for (var i = 0; i < _blocks.Length; i++) {
+                _blocks[i].transform.position = _blocks[i].transform.position.With(z: BlockLength * i);
+                _blocks[i].DestroyObstacles();
+            }
         }
 
         private void OnPlayerFellOver() {
