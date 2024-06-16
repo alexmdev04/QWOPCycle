@@ -87,12 +87,13 @@ namespace QWOPCycle.Interface {
         private void SetLabel<T>(Label label, T fromEvent, T fromSave, string template)
             where T : IComparable<T> {
             // if fromEvent >= fromSave, set new best to true
-            _hasNewBestScore |= fromEvent.CompareTo(fromSave) >= 0;
+            bool newBest = fromEvent.CompareTo(fromSave) > 0;
+            _hasNewBestScore |= newBest;
 
             label.text = string.Format(template, fromEvent);
             if (_hasNewBestScore) {
-                label.EnableInClassList(NewBestCssClass, true);
-                _newBestLabel.EnableInClassList(NewBestCssClass, true);
+                label.EnableInClassList(NewBestCssClass, newBest);
+                _newBestLabel.EnableInClassList(NewBestCssClass, _hasNewBestScore);
             }
             else { label.EnableInClassList(NewBestCssClass, false); }
         }
