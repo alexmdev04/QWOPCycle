@@ -29,12 +29,18 @@ namespace QWOPCycle
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
         #endregion
 #region Intialisation
-        private void Start() {
+        private void OnEnable() {
             BindEventsToAudio();
+        }
+        private void OnDisable() {
+            UnBindEventsToAudio();
         }
         private void BindEventsToAudio() {
             _playerFellOverBinding = new EventBinding<PlayerFellOver>(PlayFallDownSfx);
             EventBus<PlayerFellOver>.Register(_playerFellOverBinding);
+        }
+        private void UnBindEventsToAudio() {
+            EventBus<PlayerFellOver>.Deregister(_playerFellOverBinding);
         }
 #endregion
         #region Audio Logic
