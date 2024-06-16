@@ -73,7 +73,7 @@ namespace QWOPCycle.Interface {
             _hasNewBestScore = false;
 
             SetLabel(_distanceLabel, e.Distance, save.BestDistance, T_Distance);
-            SetLabel(_scoreLabel, e.Score, save.HighScore, T_Score);
+            SetLabel(_scoreLabel,  Math.Floor(e.Score), Math.Floor(save.HighScore), T_Score);
             SetLabel(_timeLabel, e.RunTime, save.BestRunTime, T_Time);
 
             _newBestLabel.visible = _hasNewBestScore;
