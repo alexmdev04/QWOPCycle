@@ -10,7 +10,9 @@
             </ui:Button>
             <ui:Button text="?" parse-escape-sequences="true" display-tooltip-when-elided="true" name="tutorial-button" style="visibility: visible;" />
         </ui:VisualElement>
-        <ui:VisualElement name="mid" style="flex-grow: 1; flex-basis: 1px; align-items: stretch;" />
+        <ui:VisualElement name="mid" style="flex-grow: 1; flex-basis: 1px; align-items: stretch;">
+            <ui:Label tabindex="-1" text="SPEED UP!" parse-escape-sequences="true" display-tooltip-when-elided="true" name="warning" style="align-self: center; justify-content: flex-start; align-items: auto; top: 250px; -unity-text-align: middle-center; color: rgb(255, 0, 0); -unity-text-outline-width: 1px; -unity-text-outline-color: rgba(0, 0, 0, 0); -unity-font-style: bold; -unity-font: initial; font-size: 41px; text-shadow: 1.5px 1.5px 12px rgb(0, 0, 0);" />
+        </ui:VisualElement>
         <ui:VisualElement name="right" style="flex-grow: 1; flex-basis: 1px;">
             <ui:VisualElement name="score-panel" style="background-color: rgba(16, 15, 15, 0.65); padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; flex-shrink: 1; min-width: 0; align-self: center; position: absolute; top: 50px; right: 50px;">
                 <ui:Label tabindex="-1" text="1:23" parse-escape-sequences="true" display-tooltip-when-elided="true" name="run-time" style="-unity-text-align: middle-center; white-space: nowrap; text-overflow: clip; -unity-font: initial; -unity-font-style: bold; font-size: 48px; color: rgb(255, 255, 255); margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
