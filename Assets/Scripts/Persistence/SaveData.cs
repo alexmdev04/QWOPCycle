@@ -8,7 +8,7 @@ namespace QWOPCycle.Persistence {
     public struct SaveData {
         private const string FILENAME = "save.data";
 
-        [field: SerializeField] public uint HighScore { get; private set; }
+        [field: SerializeField] public double HighScore { get; private set; }
 
         [field: SerializeField] public float BestDistance { get; private set; }
 
@@ -36,6 +36,8 @@ namespace QWOPCycle.Persistence {
             File.WriteAllText(Path.Combine(Application.persistentDataPath, FILENAME), json);
         }
 
+        public bool PostScore(double score) {
+            if (score <= HighScore) return false;
 
         public void Save(uint score, float distance, TimeSpan runTime) {
             HighScore = score > HighScore ? score : HighScore;

@@ -74,10 +74,8 @@ namespace QWOPCycle.Interface {
 
         private void LateUpdate() {
             _currentDistanceLabel.text = $"{_scoreTracker.DistanceTravelled:N1}m";
-            _scoreLabel.text = $"{_scoreTracker.Score} points";
-            float bestDistance = SaveDataManager.Instance.Save.BestDistance > _scoreTracker.DistanceTravelled
-                                     ? SaveDataManager.Instance.Save.BestDistance
-                                     : _scoreTracker.DistanceTravelled;
+            _scoreLabel.text = $"{System.Math.Round(_scoreTracker.Score)} points";
+            float bestDistance = Mathf.Max(SaveDataManager.Instance.Save.BestDistance, _scoreTracker.DistanceTravelled);
             _bestDistanceLabel.text = $"Best Distance: {bestDistance:N1}m";
             _runTimeLabel.text = $@"{_scoreTracker.RunTime:mm\:ss}";
 
