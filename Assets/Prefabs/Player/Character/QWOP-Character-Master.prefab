@@ -326,10 +326,16 @@ MonoBehaviour:
   pedalAudioSource: {fileID: 959404394756496893}
   fallDownAudioSource: {fileID: 1292717267323580401}
   smackAudioSource: {fileID: 8556586210999476376}
-  balanceSound: {fileID: 0}
-  pedalSound: {fileID: 0}
-  fallDownSound: {fileID: 0}
-  smackSound: {fileID: 0}
+  balanceSound:
+  - {fileID: 8300000, guid: 9d776d2fb4fe0a64dbab5bed35bba511, type: 3}
+  pedalSound:
+  - {fileID: 8300000, guid: 675217a6a4b5ba84cb1dce0c81278d3f, type: 3}
+  - {fileID: 8300000, guid: 66d8295cf0bfbb64da8d91422dc9d58c, type: 3}
+  - {fileID: 8300000, guid: fc2306cb634a826429bd4bd40272ebb9, type: 3}
+  - {fileID: 8300000, guid: 18ad20b6159c49e499ccede970cfdcd9, type: 3}
+  - {fileID: 8300000, guid: ff81d8e695e3d93449bbdee5925ab430, type: 3}
+  fallDownSound: []
+  smackSound: []
 --- !u!1 &1749882630627505056
 GameObject:
   m_ObjectHideFlags: 0
