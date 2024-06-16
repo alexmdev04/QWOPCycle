@@ -84,6 +84,9 @@ namespace QWOPCycle.Interface {
             Log.Debug("GameOver Interface : Restart clicked");
             EventBus<GameReset>.Raise(default);
             _doc.rootVisualElement.visible = false;
+            // Calling this from GameManager.OnGameReset is broken
+            // bc not all objects will have been reset
+            EventBus<GameStart>.Raise(default);
         }
 
         private void OnQuitClicked() {
