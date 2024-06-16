@@ -1,4 +1,5 @@
 ﻿using Assets.PlayerScripts;
+using QWOPCycle.Gameplay;
 using QWOPCycle.Player;
 using SideFX.Events;
 using SideFX.SceneManagement;
@@ -23,7 +24,7 @@ namespace QWOPCycle.Scoring {
 
         private bool _gameIsRunning;
         private EventBinding<SceneReady> _sceneReadyBinding;
-        private EventBinding<LevelIncrease> _levelIncreaseBinding;
+        private EventBinding<LevelIncreaseEvent> _levelIncreaseBinding;
         private PedalState _state = PedalState.None;
         public float MaxPedalPower => _maxPedalPower;
 
@@ -37,6 +38,7 @@ namespace QWOPCycle.Scoring {
             Left,
             Right,
         }
+
         private void Awake() {
             Log.Debug("[PedalTracker] Awake");
             _input = CreateInstance<InputReader>();
@@ -50,15 +52,15 @@ namespace QWOPCycle.Scoring {
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
 
-            _levelIncreaseBinding = new EventBinding<LevelIncrease>(OnLevelIncrease);
-            EventBus<LevelIncrease>.Register(_levelIncreaseBinding);
+            _levelIncreaseBinding = new EventBinding<LevelIncreaseEvent>(OnLevelIncrease);
+            EventBus<LevelIncreaseEvent>.Register(_levelIncreaseBinding);
         }
 
         private void OnDisable() {
             _input.PedalLeftEvent -= OnPedalLeft;
             _input.PedalRightEvent -= OnPedalRight;
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
-            EventBus<LevelIncrease>.Deregister(_levelIncreaseBinding);
+            EventBus<LevelIncreaseEvent>.Deregister(_levelIncreaseBinding);
         }
 
         public void Tick(float deltaTime) {
@@ -92,7 +94,12 @@ namespace QWOPCycle.Scoring {
         private void OnLevelIncrease() {
             _pedalPowerDecay += _levelIncreaseDecay; // require more pedalling
             _maxPedalPower += _levelIncreaseMaxPower; // increase overall speed
-            Log.Debug("[PedalTracker.OnLevelIncrease] Level Increased; decay: " + _pedalPowerDecay + " maxPedalPower: " + _maxPedalPower);
+            Log.Debug(
+                "[PedalTracker.OnLevelIncrease] Level Increased; decay: "
+                + _pedalPowerDecay
+                + " maxPedalPower: "
+                + _maxPedalPower
+            );
         }
     }
 }

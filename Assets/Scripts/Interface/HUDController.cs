@@ -1,5 +1,7 @@
+using QWOPCycle.Gameplay;
 using QWOPCycle.Persistence;
 using QWOPCycle.Scoring;
+using SideFX.Events;
 using Unity.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,17 +15,24 @@ namespace QWOPCycle.Interface {
         private Label _bestDistanceLabel;
         private Label _scoreLabel;
         private Label _warningLabel;
+        private Label _levelIncreaseLabel;
         private Button _tutorialButton;
         private Button _tutorialPanel;
         private bool _showTutorial;
         private float _warningLerpValue;
         private bool _warningLerpUp;
+        private float _levelIncreaseLabelTimer;
+
+        private EventBinding<LevelIncreaseEvent> _levelIncreaseBinding;
 
         [SerializeField] private ScoreTracker _scoreTracker;
         [SerializeField] private PedalTracker _pedalTracker;
 
         [SerializeField] private Color warningBaseColor = Color.cyan;
-        [SerializeField] [Range(0f, 1f)] [Tooltip("Percentage of max pedal power you must be below to display the warning")]
+
+        [SerializeField]
+        [Range(0f, 1f)]
+        [Tooltip("Percentage of max pedal power you must be below to display the warning")]
         private float warningVisiblePercent = 0.4f;
 
         private void Awake() {
@@ -33,6 +42,7 @@ namespace QWOPCycle.Interface {
             _scoreLabel = _doc.rootVisualElement.Q<Label>("score");
             _warningLabel = _doc.rootVisualElement.Q<Label>("warning");
             _runTimeLabel = _doc.rootVisualElement.Q<Label>("run-time");
+            _levelIncreaseLabel = _doc.rootVisualElement.Q<Label>("level-increase");
         }
 
         private void Start() {
@@ -48,6 +58,8 @@ namespace QWOPCycle.Interface {
         }
 
         private void OnEnable() {
+            _levelIncreaseBinding = new EventBinding<LevelIncreaseEvent>(OnLevelIncrease);
+            EventBus<LevelIncreaseEvent>.Register(_levelIncreaseBinding);
             _tutorialButton = _doc.rootVisualElement.Q<Button>("tutorial-button");
             _tutorialPanel = _doc.rootVisualElement.Q<Button>("tutorial-panel");
             _tutorialButton.clicked += ToggleTutorialPanel;
@@ -55,6 +67,7 @@ namespace QWOPCycle.Interface {
         }
 
         private void OnDisable() {
+            EventBus<LevelIncreaseEvent>.Deregister(_levelIncreaseBinding);
             _tutorialButton.clicked -= ToggleTutorialPanel;
             _tutorialPanel.clicked -= ToggleTutorialPanel;
         }
@@ -67,6 +80,19 @@ namespace QWOPCycle.Interface {
                                      : _scoreTracker.DistanceTravelled;
             _bestDistanceLabel.text = $"Best Distance: {bestDistance:N1}m";
             _runTimeLabel.text = $@"{_scoreTracker.RunTime:mm\:ss}";
+
+            WarningLabelTick();
+            LevelIncreaseLabelTick();
+        }
+
+        private void ToggleTutorialPanel() {
+            _showTutorial = !_showTutorial;
+            _tutorialPanel.visible = _showTutorial;
+            _tutorialButton.visible = !_showTutorial;
+        }
+
+        private void WarningLabelTick() {
+            // check if warning label should be visible
             _warningLabel.visible =
                 _pedalTracker.PedalPower < warningVisiblePercent * _pedalTracker.MaxPedalPower;
             if (!_warningLabel.visible) return;
@@ -87,10 +113,16 @@ namespace QWOPCycle.Interface {
             );
         }
 
-        private void ToggleTutorialPanel() {
-            _showTutorial = !_showTutorial;
-            _tutorialPanel.visible = _showTutorial;
-            _tutorialButton.visible = !_showTutorial;
+        private void LevelIncreaseLabelTick() {
+            // toggles level increase label if the timer is greater than 0
+            bool levelIncreaseLabelEnabled = _levelIncreaseLabelTimer > 0f;
+            if (levelIncreaseLabelEnabled) _levelIncreaseLabelTimer -= Time.deltaTime;
+            _levelIncreaseLabel.visible = levelIncreaseLabelEnabled;
+        }
+
+        private void OnLevelIncrease(LevelIncreaseEvent e) {
+            _levelIncreaseLabel.text = $"Level {e.Level.ToString()}";
+            _levelIncreaseLabelTimer = 3f;
         }
     }
 }

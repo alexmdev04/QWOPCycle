@@ -15,6 +15,10 @@ namespace QWOPCycle.Gameplay {
         public float Distance { get; init; }
     }
 
+    public readonly struct LevelIncreaseEvent : IEvent {
+        public uint Level { get; init; }
+    }
+
     public sealed class GameManager : MonoBehaviour {
         [SerializeField] private GameManagerAnchor anchor;
 
@@ -47,7 +51,6 @@ namespace QWOPCycle.Gameplay {
 
         private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
-        private EventBinding<LevelIncrease> _levelIncreaseBinding;
         private EventBinding<SceneReady> _sceneReadyBinding;
 
         [SerializeField] private ScoreTracker _scoreTracker;
@@ -56,7 +59,7 @@ namespace QWOPCycle.Gameplay {
         public float BlockLength { get; private set; }
         public float BlockWidth { get; private set; }
         public float BlockLaneWidth { get; private set; }
-        public int LevelCurrent { get; private set; }
+        public uint LevelCurrent { get; private set; }
 
         private GameState _gameState = GameState.Building;
 
@@ -92,23 +95,21 @@ namespace QWOPCycle.Gameplay {
         private void OnEnable() {
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
             _playerFellOverBinding = new EventBinding<PlayerFellOver>(OnPlayerFellOver);
-            _levelIncreaseBinding = new EventBinding<LevelIncrease>(OnLevelIncrease);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Register(_playerFellOverBinding);
-            EventBus<LevelIncrease>.Register(_levelIncreaseBinding);
             anchor.Provide(this);
         }
 
         private void OnDisable() {
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Deregister(_playerFellOverBinding);
-            EventBus<LevelIncrease>.Deregister(_levelIncreaseBinding);
         }
 
         private void OnSceneReady(SceneReady e) {
             if (e.Scene is not GameplayScene) return;
             BlocksInitialize();
             foreach (Block block in _blocks) { block.obstacles = block.CreateRandomObstacles(); }
+
             EventBus<StartGameEvent>.Raise(default);
         }
 
@@ -184,13 +185,14 @@ namespace QWOPCycle.Gameplay {
 
         private void LevelUpdate() {
             if (System.Math.Floor(_scoreTracker.RunTime.TotalSeconds / levelLength) > LevelCurrent) {
-                EventBus<LevelIncrease>.Raise(default);
+                LevelCurrent++;
+                Log.Debug("[GameManager] Level Increased to: " + LevelCurrent);
+                EventBus<LevelIncreaseEvent>.Raise(
+                    new LevelIncreaseEvent {
+                        Level = LevelCurrent,
+                    }
+                );
             }
-        }
-
-        private void OnLevelIncrease() {
-            LevelCurrent++;
-            Log.Debug("[GameManager.OnLevelIncrease] Level Increased to: " + LevelCurrent);
         }
     }
 }
