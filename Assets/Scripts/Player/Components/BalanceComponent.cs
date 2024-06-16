@@ -9,31 +9,21 @@ using UnityEngine;
 namespace QWOPCycle.Gameplay {
     [RequireComponent(typeof(Rigidbody))]
     public class BalanceComponent : MonoBehaviour {
-#region Component References
-
-        //public Rigidbody _rigidBody;
         private QWOPCharacter _character;
         [SerializeField] private PedalTracker pedalTracker;
 
-#endregion
-
-#region Getter Setters
 
         [field: Header("Settings")] public bool CanMove { get; set; } = true;
 
-#endregion
-
-#region Intialisation
 
         public void SetCharacter(QWOPCharacter character) {
             _character = character;
         }
 
-#endregion
 
-#region Vars
+        [Header("Balance Physics")]
+        public float minBalanceForce = 100f;
 
-        [Header("Balance Physics")] public float minBalanceForce = 100f;
         public float maxBalanceForce = 1000f;
         public Vector3 balancePivotPoint = new(0.0f, 0.0f, 1.0f);
         public Vector3 balancePivotOffset;
@@ -43,13 +33,22 @@ namespace QWOPCycle.Gameplay {
         public float maxSpeedWhenTilting = 0.5f;
         public bool enableDebug;
 
-#endregion
+        private EventBinding<GameReset> _gameResetBinding;
 
-#region Delegates
+        private void OnEnable() {
+            _gameResetBinding = new EventBinding<GameReset>(OnGameReset);
+            EventBus<GameReset>.Register(_gameResetBinding);
+        }
 
-        //public event Action FellOverEvent;
+        private void OnDisable() {
+            EventBus<GameReset>.Deregister(_gameResetBinding);
+        }
 
-#endregion
+        private void OnGameReset(GameReset e) {
+            CanMove = true;
+            _character.RigidBody.ResetInertiaTensor();
+        }
+
 
 #region Balance Logic
 
@@ -78,7 +77,6 @@ namespace QWOPCycle.Gameplay {
             EventBus<PlayerFellOver>.Raise(default);
             //FellOverEvent?.Invoke();
             CanMove = false;
-            _character.RigidBody.ResetInertiaTensor();
         }
 
         private float CalcPowerLevel() {
