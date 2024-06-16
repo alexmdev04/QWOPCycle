@@ -4,18 +4,40 @@ using UnityEngine;
 
 namespace QWOPCycle
 {
-    public class BgmPlayer : MonoBehaviour
-    {
+    public class BgmPlayer : MonoBehaviour {
+        [Header("Audio")]
+        public AudioSource gameMusicSource;
+        public AudioClip gameMusic;
+
+        [Header("Settings")]
+        public int pitchTickRate = 2;
+        private int _pitchTick = 0;
         // Start is called before the first frame update
-        void Start()
-        {
-        
+        void Start() {
+            PlayMusic();
+        }
+
+        private void PlayMusic() {
+            if (gameMusicSource.isPlaying) return;
+            if (gameMusicSource == null
+                || gameMusic == null) return;
+            gameMusicSource.clip = gameMusic;
+            gameMusicSource.loop = true;
+            gameMusicSource.Play();
         }
 
         // Update is called once per frame
-        void Update()
-        {
-        
+        void FixedUpdate() {
+            PitchAudioOverTime();
+        }
+
+        private void PitchAudioOverTime() {
+            _pitchTick += 1;
+            if (_pitchTick < pitchTickRate) return;
+            if (gameMusicSource == null
+                || gameMusic == null) return;
+            gameMusicSource.pitch = Mathf.Clamp(gameMusicSource.pitch + 0.01f, 1, 2);
+            _pitchTick = 0;
         }
     }
 }
