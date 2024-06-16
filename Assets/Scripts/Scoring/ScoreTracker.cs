@@ -5,7 +5,8 @@ using Unity.Logging;
 using UnityEngine;
 
 namespace QWOPCycle.Scoring {
-    public readonly struct ScoreEvent : IEvent { // Usage: EventBus<ScoreEvent>.Raise(new ScoreEvent(5));
+    // Usage: EventBus<ScoreEvent>.Raise(new ScoreEvent(5));
+    public readonly struct ScoreEvent : IEvent {
         public readonly uint Value;
         public ScoreEvent(uint value) => Value = value;
     }
@@ -18,6 +19,11 @@ namespace QWOPCycle.Scoring {
     public sealed class ScoreTracker : ScriptableObject {
         public uint Score { get; private set; }
         public float DistanceTravelled { get; private set; }
+
+        public TimeSpan RunTime
+            => _isGameRunning
+                   ? DateTime.Now - _startTime
+                   : _endTime - _startTime;
 
         private EventBinding<ScoreEvent> _scoreBinding;
         private EventBinding<StartGameEvent> _startGameBinding;
