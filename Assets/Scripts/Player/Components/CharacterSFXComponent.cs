@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using QWOPCycle.Player;
+using QWOPCycle.Persistence;
 using SideFX.Events;
 using Unity.Mathematics;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace QWOPCycle
 {
     public class CharacterSFXComponent : MonoBehaviour {
         #region System
+        private GameSettings _settings;
         [Header("Audio Sources")]
         public AudioSource balanceAudioSource;
         public AudioSource pedalAudioSource;
@@ -48,6 +50,7 @@ namespace QWOPCycle
             if (!CanPlaySfx) return;
             if (balanceAudioSource != null
                 && balanceSound != null) {
+                CheckVolume(balanceAudioSource);
                 balanceAudioSource.clip = ChooseRandomClip(balanceSound);
                 balanceAudioSource.Play();
             } else {Debug.LogWarning("Character SFX Component : balance audio source or sound not set.");}
@@ -56,6 +59,7 @@ namespace QWOPCycle
             if (!CanPlaySfx) return;
             if (pedalAudioSource.isPlaying) return;
             if (pedalAudioSource != null && pedalSound != null) {
+                CheckVolume(pedalAudioSource);
                 pedalAudioSource.clip = ChooseRandomClip(pedalSound);
                 pedalAudioSource.Play();
             } else {Debug.LogError("Character SFX Component : Pedal audio source or sound not set.");}
@@ -64,6 +68,7 @@ namespace QWOPCycle
             if (!CanPlaySfx) return;
             if (fallDownAudioSource != null
                 && fallDownSound != null) {
+                CheckVolume(fallDownAudioSource);
                 fallDownAudioSource.clip = ChooseRandomClip(fallDownSound);
                 fallDownAudioSource.Play();
             } else {Debug.LogError("Character SFX Component : Fall down audio source or sound not set.");}
@@ -74,11 +79,11 @@ namespace QWOPCycle
             if (!CanPlaySfx) return;
             if (smackAudioSource != null
                 && smackSound != null) {
+                CheckVolume(smackAudioSource);
                 smackAudioSource.clip = ChooseRandomClip(smackSound);
                 smackAudioSource.Play();
             } else {Debug.LogError("Character SFX Component : Smack audio source or sound not set.");}
         }
-
         private AudioClip ChooseRandomClip(AudioClip[] clipArray) {
             if (clipArray == null
                 || clipArray.Length == 0) {
@@ -87,6 +92,10 @@ namespace QWOPCycle
             }
             int randomIndex = Random.Range(0, clipArray.Length);
             return clipArray[randomIndex];
+        }
+        private void CheckVolume(AudioSource source) {
+            _settings = SaveDataManager.Instance.Settings;
+            source.volume = _settings.Audio.sfxVolume;
         }
         #endregion
     }

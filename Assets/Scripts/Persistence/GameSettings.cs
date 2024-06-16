@@ -8,6 +8,7 @@ namespace QWOPCycle.Persistence {
         public bool IsMusicOn;
         public bool IsSfxOn;
         [Range(0f, 1f)] public float MusicVolume;
+        [Range(0f, 1f)] public float sfxVolume;
     }
 
     [Serializable]
