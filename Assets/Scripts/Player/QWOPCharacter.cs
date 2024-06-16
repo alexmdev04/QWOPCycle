@@ -1,5 +1,6 @@
 using Assets.PlayerScripts;
 using SideFX.Anchors;
+using SideFX.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,8 @@ namespace QWOPCycle.Gameplay {
         public BalanceComponent BalanceComponent { get; private set; }
         public SteerComponent SteerComponent { get; private set; }
         public CharacterSFXComponent CharacterSfxComponent { get; private set; }
+
+        private EventBinding<GameReset> _gameStartBinding;
 
 #endregion
 
@@ -39,8 +42,6 @@ namespace QWOPCycle.Gameplay {
         private void Start() {
             SteerComponent.SetCharacter(this);
             BalanceComponent.SetCharacter(this);
-            BalanceComponent.CanMove = canMove;
-            CharacterSfxComponent.CanPlaySfx = true;
         }
 
         private void Update() {
@@ -50,16 +51,26 @@ namespace QWOPCycle.Gameplay {
             }
         }
 
+        private void OnGameReset(GameReset e) {
+            transform.position = Vector3.up * 0.5f;
+            transform.rotation = Quaternion.identity;
+            BalanceComponent.CanMove = true;
+            CharacterSfxComponent.CanPlaySfx = true;
+        }
+
 #endregion
 
 #region Bind/Unbind
 
         private void OnEnable() {
             BindController();
+            _gameStartBinding = new EventBinding<GameReset>(OnGameReset);
+            EventBus<GameReset>.Register(_gameStartBinding);
         }
 
         private void OnDisable() {
             UnbindController();
+            EventBus<GameReset>.Deregister(_gameStartBinding);
         }
 
         private void BindController() {
