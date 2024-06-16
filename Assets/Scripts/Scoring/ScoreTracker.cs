@@ -2,13 +2,12 @@ using System;
 using QWOPCycle.Gameplay;
 using SideFX.Events;
 using Unity.Logging;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace QWOPCycle.Scoring {
     /// <summary>
     /// A Project level asset that keeps track of score.
-    /// Is ticked from <see cref="GameManager"/>
+    /// Is ticked from <see cref="GameManager" />
     /// </summary>
     [CreateAssetMenu(fileName = "ScoreTracker", menuName = "QWOPCycle/ScoreTracker")]
     public sealed class ScoreTracker : ScriptableObject {
@@ -20,26 +19,27 @@ namespace QWOPCycle.Scoring {
                    ? DateTime.Now - _startTime
                    : _endTime - _startTime;
 
-        private EventBinding<StartGameEvent> _startGameBinding;
-        private EventBinding<GameOverEvent> _gameOverBinding;
+        private EventBinding<GameStart> _startGameBinding;
+        private EventBinding<GameOver> _gameOverBinding;
         private DateTime _startTime;
         private DateTime _endTime;
         private bool _isGameRunning;
 
 
         private void OnEnable() {
-            _startGameBinding = new EventBinding<StartGameEvent>(OnStartGame);
-            _gameOverBinding = new EventBinding<GameOverEvent>(OnGameOver);
-            EventBus<StartGameEvent>.Register(_startGameBinding);
-            EventBus<GameOverEvent>.Register(_gameOverBinding);
+            _startGameBinding = new EventBinding<GameStart>(OnStartGame);
+            _gameOverBinding = new EventBinding<GameOver>(OnGameOver);
+            EventBus<GameStart>.Register(_startGameBinding);
+            EventBus<GameOver>.Register(_gameOverBinding);
         }
 
         private void OnDisable() {
-            EventBus<StartGameEvent>.Deregister(_startGameBinding);
-            EventBus<GameOverEvent>.Deregister(_gameOverBinding);
+            EventBus<GameStart>.Deregister(_startGameBinding);
+            EventBus<GameOver>.Deregister(_gameOverBinding);
         }
 
         public void Tick(float deltaTime) {
+            if (!_isGameRunning) return;
             Score += deltaTime * (DistanceTravelled / (float)RunTime.TotalSeconds);
         }
 
@@ -61,7 +61,7 @@ namespace QWOPCycle.Scoring {
             _isGameRunning = true;
         }
 
-        private void OnGameOver(GameOverEvent e) {
+        private void OnGameOver(GameOver e) {
             _endTime = DateTime.Now;
             _isGameRunning = false;
         }
