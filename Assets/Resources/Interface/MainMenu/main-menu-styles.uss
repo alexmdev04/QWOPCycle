@@ -17,20 +17,20 @@
 }
 
 .menu-button:hover {
-    border-left-color: rgb(135, 154, 57);
-    border-right-color: rgb(135, 154, 57);
-    border-top-color: rgb(135, 154, 57);
-    border-bottom-color: rgb(135, 154, 57);
+    border-left-color: rgb(36, 131, 123);
+    border-right-color: rgb(36, 131, 123);
+    border-top-color: rgb(36, 131, 123);
+    border-bottom-color: rgb(36, 131, 123);
 }
 
 .menu-button:active {
-    background-color: rgb(135, 154, 57);
+    background-color: rgb(58, 169, 159);
     color: rgb(16, 15, 15);
 }
 
 .menu-button:focus {
-    border-left-color: rgb(135, 154, 57);
-    border-right-color: rgb(135, 154, 57);
-    border-top-color: rgb(135, 154, 57);
-    border-bottom-color: rgb(135, 154, 57);
+    border-left-color: rgb(36, 131, 123);
+    border-right-color: rgb(36, 131, 123);
+    border-top-color: rgb(36, 131, 123);
+    border-bottom-color: rgb(36, 131, 123);
 }

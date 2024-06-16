@@ -1,3 +1,4 @@
+using System;
 using QWOPCycle.Player;
 using QWOPCycle.Scoring;
 using SideFX.Anchors;
@@ -10,9 +11,12 @@ using UnityEngine;
 namespace QWOPCycle.Gameplay {
     public readonly struct StartGameEvent : IEvent { }
 
+    public readonly struct RestartGameEvent : IEvent { }
+
     public readonly struct GameOverEvent : IEvent {
         public uint Score { get; init; }
         public float Distance { get; init; }
+        public TimeSpan RunTime { get; init; }
     }
 
     public readonly struct LevelIncreaseEvent : IEvent {
@@ -118,6 +122,7 @@ namespace QWOPCycle.Gameplay {
                 new GameOverEvent {
                     Score = _scoreTracker.Score,
                     Distance = _scoreTracker.DistanceTravelled,
+                    RunTime = _scoreTracker.RunTime,
                 }
             );
         }

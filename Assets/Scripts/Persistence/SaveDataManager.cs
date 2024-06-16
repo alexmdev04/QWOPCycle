@@ -1,6 +1,5 @@
 using QWOPCycle.Gameplay;
 using SideFX.Events;
-using Unity.Logging;
 using UnityEngine;
 
 namespace QWOPCycle.Persistence {
@@ -19,8 +18,6 @@ namespace QWOPCycle.Persistence {
         public SaveData Save { get; private set; }
         public GameSettings Settings { get; private set; }
 
-        private EventBinding<SaveGameEvent> _saveGameBinding;
-        private EventBinding<SaveSettingsEvent> _saveSettingsBinding;
         private EventBinding<GameOverEvent> _gameOverBinding;
 
         private void Awake() {
@@ -32,35 +29,18 @@ namespace QWOPCycle.Persistence {
             Save = SaveData.Load();
             Settings = GameSettings.Load();
 
-            _saveGameBinding = new EventBinding<SaveGameEvent>(OnSaveGame);
-            _saveSettingsBinding = new EventBinding<SaveSettingsEvent>(OnSaveSettings);
             _gameOverBinding = new EventBinding<GameOverEvent>(OnGameOver);
 
-            EventBus<SaveGameEvent>.Register(_saveGameBinding);
-            EventBus<SaveSettingsEvent>.Register(_saveSettingsBinding);
             EventBus<GameOverEvent>.Register(_gameOverBinding);
         }
 
         private void OnDisable() {
-            EventBus<SaveGameEvent>.Deregister(_saveGameBinding);
-            EventBus<SaveSettingsEvent>.Deregister(_saveSettingsBinding);
             EventBus<GameOverEvent>.Deregister(_gameOverBinding);
-        }
-
-        private void OnSaveGame() {
-            Log.Debug("SaveDataManager : Saving Player Data");
-            Save.Save();
-        }
-
-        private void OnSaveSettings() {
-            Log.Debug("SaveDataManager : Saving Settings");
-            Settings.Save();
         }
 
 
         private void OnGameOver(GameOverEvent e) {
-            Save.PostScore(e.Score);
-            Save.PostDistance(e.Distance);
+            Save.Save(e.Score, e.Distance, e.RunTime);
         }
     }
 }
