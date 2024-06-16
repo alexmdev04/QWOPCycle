@@ -1,5 +1,6 @@
 using System;
 using QWOPCycle.Player;
+using QWOPCycle.Scoring;
 using SideFX.Events;
 using Unity.Logging;
 using Unity.Mathematics;
@@ -12,6 +13,7 @@ namespace QWOPCycle.Gameplay {
 
         //public Rigidbody _rigidBody;
         private QWOPCharacter _character;
+        [SerializeField] private PedalTracker pedalTracker;
 
 #endregion
 
@@ -130,7 +132,10 @@ namespace QWOPCycle.Gameplay {
             float appliedSteeringForce = steeringForce * AbsoluteTiltAngle * steeringDirection * maxSpeedWhenTilting;
 
             //Apply the steering force | locked on the X axis only.
-            _character.RigidBody.AddForce(Vector3.right * appliedSteeringForce, ForceMode.Acceleration);
+            _character.RigidBody.AddForce(
+                Vector3.right * (appliedSteeringForce * (pedalTracker.MaxPedalPower - pedalTracker.PedalPower)),
+                ForceMode.Acceleration
+            );
         }
 
 #endregion
