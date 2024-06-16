@@ -1,7 +1,6 @@
+using System;
 using QWOPCycle.Gameplay;
 using SideFX.Events;
-using SideFX.SceneManagement;
-using SideFX.SceneManagement.Events;
 using Unity.Logging;
 using UnityEngine;
 
@@ -21,22 +20,25 @@ namespace QWOPCycle.Scoring {
         public float DistanceTravelled { get; private set; }
 
         private EventBinding<ScoreEvent> _scoreBinding;
-        private EventBinding<SceneReady> _sceneReadyBinding;
+        private EventBinding<StartGameEvent> _startGameBinding;
         private EventBinding<GameOverEvent> _gameOverBinding;
-        private bool _shouldTrack;
+        private DateTime _startTime;
+        private DateTime _endTime;
+        private bool _isGameRunning;
+
 
         private void OnEnable() {
             _scoreBinding = new EventBinding<ScoreEvent>(OnScore);
-            _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
+            _startGameBinding = new EventBinding<StartGameEvent>(OnStartGame);
             _gameOverBinding = new EventBinding<GameOverEvent>(OnGameOver);
             EventBus<ScoreEvent>.Register(_scoreBinding);
-            EventBus<SceneReady>.Register(_sceneReadyBinding);
+            EventBus<StartGameEvent>.Register(_startGameBinding);
             EventBus<GameOverEvent>.Register(_gameOverBinding);
         }
 
         private void OnDisable() {
             EventBus<ScoreEvent>.Deregister(_scoreBinding);
-            EventBus<SceneReady>.Deregister(_sceneReadyBinding);
+            EventBus<StartGameEvent>.Deregister(_startGameBinding);
             EventBus<GameOverEvent>.Deregister(_gameOverBinding);
         }
 
@@ -56,17 +58,17 @@ namespace QWOPCycle.Scoring {
         /// <summary>
         /// Reset score to 0 when gameplay starts
         /// </summary>
-        private void OnSceneReady(SceneReady e) {
-            if (e.Scene is not GameplayScene) return;
-
+        private void OnStartGame() {
             Log.Verbose("ScoreTracker : Resetting");
             Score = 0;
             DistanceTravelled = 0f;
-            _shouldTrack = true;
+            _startTime = DateTime.Now;
+            _isGameRunning = true;
         }
 
         private void OnGameOver(GameOverEvent e) {
-            _shouldTrack = false;
+            _endTime = DateTime.Now;
+            _isGameRunning = false;
         }
 
 #endregion
