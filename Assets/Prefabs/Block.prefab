@@ -122,3 +122,6 @@ MonoBehaviour:
     type: 3}
   gameManagerAnchor: {fileID: 11400000, guid: 0b2f2e744a886684b8a63380ea758f22, type: 2}
   obstacles: []
+  laneObstacleSpawnChance: 0.1
+  obstacleCenterDistanceVariance: 0.2
+  emptyLanes: 1

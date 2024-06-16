@@ -4,6 +4,7 @@ using SideFX.Anchors;
 using SideFX.Events;
 using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
+using Unity.Logging;
 using UnityEngine;
 
 namespace QWOPCycle.Gameplay {
@@ -23,13 +24,16 @@ namespace QWOPCycle.Gameplay {
         [SerializeField] [Tooltip("This value is only used in Start()")]
         private int blocksNumToCreate = 7;
 
-        [Tooltip("")] public int blockLanes = 4;
+        public int blockLanes = 4;
 
         [SerializeField] [Tooltip("In meters per second")]
         private float minTrackSpeed = 1f;
 
         [SerializeField] [Tooltip("In meters per second")]
-        private float maxSpeedBonus = 1f;
+        private float maxSpeedBonus = 5f;
+
+        [SerializeField] [Tooltip("In seconds")]
+        private double levelLength = 20d;
 
         private int
             _blockMovedIndex,
@@ -43,6 +47,7 @@ namespace QWOPCycle.Gameplay {
 
         private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
+        private EventBinding<LevelIncrease> _levelIncreaseBinding;
         private EventBinding<SceneReady> _sceneReadyBinding;
 
         [SerializeField] private ScoreTracker _scoreTracker;
@@ -51,6 +56,7 @@ namespace QWOPCycle.Gameplay {
         public float BlockLength { get; private set; }
         public float BlockWidth { get; private set; }
         public float BlockLaneWidth { get; private set; }
+        public int LevelCurrent { get; private set; }
 
         private GameState _gameState = GameState.Building;
 
@@ -76,6 +82,7 @@ namespace QWOPCycle.Gameplay {
                     BlocksMove();
                     TrackDistanceTravelled();
                     _pedalTracker.Tick(Time.deltaTime);
+                    LevelUpdate();
                     return;
                 case GameState.GameOver:
                     break;
@@ -85,14 +92,17 @@ namespace QWOPCycle.Gameplay {
         private void OnEnable() {
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
             _playerFellOverBinding = new EventBinding<PlayerFellOver>(OnPlayerFellOver);
+            _levelIncreaseBinding = new EventBinding<LevelIncrease>(OnLevelIncrease);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Register(_playerFellOverBinding);
+            EventBus<LevelIncrease>.Register(_levelIncreaseBinding);
             anchor.Provide(this);
         }
 
         private void OnDisable() {
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Deregister(_playerFellOverBinding);
+            EventBus<LevelIncrease>.Deregister(_levelIncreaseBinding);
         }
 
         private void OnSceneReady(SceneReady e) {
@@ -171,5 +181,16 @@ namespace QWOPCycle.Gameplay {
         }
 
         private float GetTrackSpeed() => minTrackSpeed + _pedalTracker.PedalPowerRatio * maxSpeedBonus;
+
+        private void LevelUpdate() {
+            if (System.Math.Floor(_scoreTracker.RunTime.TotalSeconds / levelLength) > LevelCurrent) {
+                EventBus<LevelIncrease>.Raise(default);
+            }
+        }
+
+        private void OnLevelIncrease() {
+            LevelCurrent++;
+            Log.Debug("[GameManager.OnLevelIncrease] Level Increased to: " + LevelCurrent);
+        }
     }
 }
