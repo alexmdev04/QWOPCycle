@@ -316,7 +316,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fc2306cb634a826429bd4bd40272ebb9, type: 3}
   - {fileID: 8300000, guid: 18ad20b6159c49e499ccede970cfdcd9, type: 3}
   - {fileID: 8300000, guid: ff81d8e695e3d93449bbdee5925ab430, type: 3}
-  fallDownSound: []
+  fallDownSound:
+  - {fileID: 8300000, guid: a3c9d05df31db784eb8e86572c80743b, type: 3}
   smackSound: []
 --- !u!1 &2487332955029229513
 GameObject:

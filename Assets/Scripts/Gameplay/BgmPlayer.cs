@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using QWOPCycle.Persistence;
 using UnityEngine;
 
 namespace QWOPCycle
 {
     public class BgmPlayer : MonoBehaviour {
+        private GameSettings _settings;
         [Header("Audio")]
         public AudioSource gameMusicSource;
         public AudioClip gameMusic;
@@ -21,6 +23,8 @@ namespace QWOPCycle
             if (gameMusicSource.isPlaying) return;
             if (gameMusicSource == null
                 || gameMusic == null) return;
+            _settings = SaveDataManager.Instance.Settings;
+            gameMusicSource.volume = _settings.Audio.MusicVolume;
             gameMusicSource.clip = gameMusic;
             gameMusicSource.loop = true;
             gameMusicSource.Play();
