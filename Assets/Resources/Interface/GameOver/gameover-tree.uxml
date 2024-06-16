@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/Interface/MainMenu/main-menu-styles.uss?fileID=7433441132597879392&amp;guid=a7bc5827b48a4184db0e547effabdd8c&amp;type=3#main-menu-styles" />
+    <Style src="project://database/Assets/Resources/Interface/GameOver/gameover-styles.uss?fileID=7433441132597879392&amp;guid=361c45413138d2a47b9f5167b6b0b555&amp;type=3#gameover-styles" />
+    <ui:VisualElement name="root" style="flex-grow: 1; justify-content: center; align-items: stretch; align-self: stretch;">
+        <ui:VisualElement name="panel" style="align-items: center; justify-content: center; align-self: center; padding-top: 25px; padding-right: 25px; padding-bottom: 25px; padding-left: 25px; font-size: 24px; background-color: rgba(16, 15, 15, 0.95); color: rgb(206, 205, 195);">
+            <ui:Label tabindex="-1" text="Game Over!" parse-escape-sequences="true" display-tooltip-when-elided="true" name="title" style="margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+            <ui:Label tabindex="-1" text="Distance Travelled: 0m" parse-escape-sequences="true" display-tooltip-when-elided="true" name="distance-travelled" class="new-best" style="margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 16px;" />
+            <ui:Label tabindex="-1" text="Score: 69" parse-escape-sequences="true" display-tooltip-when-elided="true" name="score" class="new-best" style="margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 16px;" />
+            <ui:Label tabindex="-1" text="Time: 4:20" parse-escape-sequences="true" display-tooltip-when-elided="true" name="runtime" class="new-best" style="margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 16px;" />
+            <ui:Label tabindex="-1" text="New High Scores!" parse-escape-sequences="true" display-tooltip-when-elided="true" name="new-best" class="new-best" style="margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 16px;" />
+            <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                <ui:Button text="Restart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="restart" class="menu-button" style="font-size: 16px; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;" />
+                <ui:Button text="Quit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="quit" class="menu-button" style="font-size: 16px; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
