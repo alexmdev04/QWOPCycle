@@ -48,6 +48,7 @@ namespace QWOPCycle
         }
         public void PlayPedalSfx() {
             if (!CanPlaySfx) return;
+            if (pedalAudioSource.isPlaying) return;
             if (pedalAudioSource != null && pedalSound != null) {
                 pedalAudioSource.clip = ChooseRandomClip(pedalSound);
                 pedalAudioSource.Play();
@@ -60,6 +61,8 @@ namespace QWOPCycle
                 fallDownAudioSource.clip = ChooseRandomClip(fallDownSound);
                 fallDownAudioSource.Play();
             } else {Debug.LogError("Character SFX Component : Fall down audio source or sound not set.");}
+
+            CanPlaySfx = false;
         }
         public void PlaySmackSfx() {
             if (!CanPlaySfx) return;
