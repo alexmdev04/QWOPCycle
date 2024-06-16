@@ -36,11 +36,8 @@ namespace QWOPCycle.Persistence {
             File.WriteAllText(Path.Combine(Application.persistentDataPath, FILENAME), json);
         }
 
-        public bool PostScore(double score) {
-            if (score <= HighScore) return false;
-
-        public void Save(uint score, float distance, TimeSpan runTime) {
-            HighScore = score > HighScore ? score : HighScore;
+        public void Save(double score, float distance, TimeSpan runTime) {
+            HighScore = Math.Max(score, HighScore);// score > HighScore ? score : HighScore;
             BestDistance = distance > BestDistance ? distance : BestDistance;
             _bestRunTime = runTime.TotalSeconds > _bestRunTime ? runTime.TotalSeconds : _bestRunTime;
             Save();
