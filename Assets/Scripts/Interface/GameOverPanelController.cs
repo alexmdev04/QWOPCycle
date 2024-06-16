@@ -4,6 +4,7 @@ using QWOPCycle.Persistence;
 using SideFX.Events;
 using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
+using Unity.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -35,22 +36,7 @@ namespace QWOPCycle.Interface {
 
         private void Awake() {
             _doc = GetComponent<UIDocument>();
-            _doc.enabled = false;
-        }
-
-        private void OnEnable() {
-            _gameStartBinding = new EventBinding<StartGameEvent>(OnGameStart);
-            _gameOverBinding = new EventBinding<GameOverEvent>(OnGameOver);
-            EventBus<StartGameEvent>.Register(_gameStartBinding);
-            EventBus<GameOverEvent>.Register(_gameOverBinding);
-        }
-
-        private void OnDisable() {
-            EventBus<StartGameEvent>.Deregister(_gameStartBinding);
-            EventBus<GameOverEvent>.Deregister(_gameOverBinding);
-        }
-
-        private void RefreshReferences() {
+            _doc.rootVisualElement.visible = false;
             _distanceLabel = _doc.rootVisualElement.Q<Label>("distance-travelled");
             _scoreLabel = _doc.rootVisualElement.Q<Label>("score");
             _timeLabel = _doc.rootVisualElement.Q<Label>("runtime");
@@ -59,13 +45,29 @@ namespace QWOPCycle.Interface {
             _quitButton = _doc.rootVisualElement.Q<Button>("quit");
         }
 
+        private void OnEnable() {
+            _restartButton.clicked += OnRestartClicked;
+            _quitButton.clicked += OnQuitClicked;
+
+            _gameStartBinding = new EventBinding<StartGameEvent>(OnGameStart);
+            _gameOverBinding = new EventBinding<GameOverEvent>(OnGameOver);
+            EventBus<StartGameEvent>.Register(_gameStartBinding);
+            EventBus<GameOverEvent>.Register(_gameOverBinding);
+        }
+
+        private void OnDisable() {
+            _restartButton.clicked -= OnRestartClicked;
+            _quitButton.clicked -= OnQuitClicked;
+
+            EventBus<StartGameEvent>.Deregister(_gameStartBinding);
+            EventBus<GameOverEvent>.Deregister(_gameOverBinding);
+        }
+
         private void OnGameStart(StartGameEvent e) {
-            _doc.enabled = false;
+            _doc.rootVisualElement.visible = false;
         }
 
         private void OnGameOver(GameOverEvent e) {
-            _doc.enabled = true;
-            RefreshReferences();
             SaveData save = SaveDataManager.Instance.Save;
 
             _hasNewBestScore = false;
@@ -75,13 +77,18 @@ namespace QWOPCycle.Interface {
             SetLabel(_timeLabel, e.RunTime, save.BestRunTime, T_Time);
 
             _newBestLabel.visible = _hasNewBestScore;
-
-            _restartButton.clicked += () => {
-                EventBus<StartGameEvent>.Raise(default);
-                _doc.enabled = false;
-            };
-            _quitButton.clicked += () => EventBus<LoadRequest>.Raise(new LoadRequest(_mainMenuScene));
             _doc.rootVisualElement.visible = true;
+        }
+
+        private void OnRestartClicked() {
+            Log.Debug("GameOver Interface : Restart clicked");
+            EventBus<RestartGameEvent>.Raise(default);
+            _doc.enabled = false;
+        }
+
+        private void OnQuitClicked() {
+            Log.Debug("GameOver Interface : Quit clicked");
+            EventBus<LoadRequest>.Raise(new LoadRequest(_mainMenuScene));
         }
 
         private void SetLabel<T>(Label label, T fromEvent, T fromSave, string template)
