@@ -1,4 +1,5 @@
 ﻿using Assets.PlayerScripts;
+using QWOPCycle.Player;
 using SideFX.Events;
 using SideFX.SceneManagement;
 using SideFX.SceneManagement.Events;
@@ -16,10 +17,13 @@ namespace QWOPCycle.Scoring {
         [SerializeField] private float _pedalPowerIncrement = 1f;
         [SerializeField] private float _pedalPowerDecay = 0.1f;
         [SerializeField] private float _maxPedalPower = 10f;
+        [SerializeField] private float _levelIncreaseDecay = 0.2f;
+        [SerializeField] private float _levelIncreaseMaxPower = 1f;
         [SerializeField] private InputReader _input;
 
         private bool _gameIsRunning;
         private EventBinding<SceneReady> _sceneReadyBinding;
+        private EventBinding<LevelIncrease> _levelIncreaseBinding;
         private PedalState _state = PedalState.None;
         public float MaxPedalPower => _maxPedalPower;
 
@@ -45,12 +49,16 @@ namespace QWOPCycle.Scoring {
 
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
+
+            _levelIncreaseBinding = new EventBinding<LevelIncrease>(OnLevelIncrease);
+            EventBus<LevelIncrease>.Register(_levelIncreaseBinding);
         }
 
         private void OnDisable() {
             _input.PedalLeftEvent -= OnPedalLeft;
             _input.PedalRightEvent -= OnPedalRight;
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
+            EventBus<LevelIncrease>.Deregister(_levelIncreaseBinding);
         }
 
         public void Tick(float deltaTime) {
@@ -79,6 +87,12 @@ namespace QWOPCycle.Scoring {
                 _state = PedalState.Right;
                 PedalPower += _pedalPowerIncrement;
             }
+        }
+
+        private void OnLevelIncrease() {
+            _pedalPowerDecay += _levelIncreaseDecay; // require more pedalling
+            _maxPedalPower += _levelIncreaseMaxPower; // increase overall speed
+            Log.Debug("[PedalTracker.OnLevelIncrease] Level Increased; decay: " + _pedalPowerDecay + " maxPedalPower: " + _maxPedalPower);
         }
     }
 }
