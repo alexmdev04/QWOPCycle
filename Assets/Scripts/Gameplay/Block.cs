@@ -21,9 +21,11 @@ namespace QWOPCycle.Gameplay {
             _random = new Random();
         }
 
+#if UNITY_EDITOR
         private void Update() {
             if (Keyboard.current.spaceKey.wasPressedThisFrame) obstacles = CreateRandomObstacles();
         }
+#endif
 
         /// <summary>
         /// Spawns random obstacles within the given number of tracks,
