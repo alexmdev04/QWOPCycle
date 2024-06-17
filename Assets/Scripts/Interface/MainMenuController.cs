@@ -26,6 +26,11 @@ namespace QWOPCycle.Interface {
             _startButton.clicked += StartButtonPressed;
             _optionsButton.clicked += OptionsButtonPressed;
             _exitButton.clicked += ExitButtonPressed;
+
+#if UNITY_WEBGL
+            _optionsButton.style.display = DisplayStyle.None;
+            _exitButton.style.display = DisplayStyle.None;
+#endif
         }
 
         private void StartButtonPressed() {
