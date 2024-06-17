@@ -156,9 +156,10 @@ MonoBehaviour:
     type: 3}
   blocksNumToCreate: 7
   blockLanes: 4
-  minTrackSpeed: 1
+  minTrackSpeed: 0
   maxSpeedBonus: 5
-  levelLength: 20
+  levelLength: 10
+  laneObstacleSpawnChance: 0.1
   _scoreTracker: {fileID: 11400000, guid: 4ced42be744e7794b9aadbe719aa2336, type: 2}
   _pedalTracker: {fileID: 11400000, guid: 9236c958fc54d074897948a9d585ff48, type: 2}
 --- !u!4 &91900217

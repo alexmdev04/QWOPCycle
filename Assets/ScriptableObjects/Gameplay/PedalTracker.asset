@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50713b31269244238ef831ed6e8181a8, type: 3}
   m_Name: PedalTracker
   m_EditorClassIdentifier: 
-  debugPedalPowerRatio: 0.58298063
+  debugPedalPowerRatio: 0.6798761
   pedalPowerIncrement: 1
-  pedalPowerDecay: 0.1
+  pedalPowerDecay: 1
   maxPedalPower: 10
   _levelIncreaseDecay: 0.5
-  _levelIncreaseMaxPower: 1
+  _levelIncreaseMaxPower: 2.5
   _input: {fileID: 11400000, guid: 990984dcffc886546b603c5d99af9444, type: 2}

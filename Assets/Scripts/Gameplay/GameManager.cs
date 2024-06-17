@@ -43,20 +43,17 @@ namespace QWOPCycle.Gameplay {
         [SerializeField] [Tooltip("In seconds")]
         private double levelLength = 20d;
 
-        private int
-            _blockMovedIndex,
-            _blocksNumCreated;
-
-        private float
-            _blockMoveToFrontThreshold,
-            _blockMoveDistanceOld;
-
+        public float laneObstacleSpawnChance = 0.1f;
+        private int _blockMovedIndex;
+        private int _blocksNumCreated;
+        private float _blockMoveToFrontThreshold;
+        private float _blockMoveDistanceOld;
         private Block[] _blocks;
-
         private bool _blocksReady;
         private EventBinding<PlayerFellOver> _playerFellOverBinding;
         private EventBinding<SceneReady> _sceneReadyBinding;
         private EventBinding<GameReset> _gameResetBinding;
+        private EventBinding<LevelIncreaseEvent> _levelIncreaseBinding;
 
         [SerializeField] private ScoreTracker _scoreTracker;
         [SerializeField] private PedalTracker _pedalTracker;
@@ -102,9 +99,11 @@ namespace QWOPCycle.Gameplay {
             _sceneReadyBinding = new EventBinding<SceneReady>(OnSceneReady);
             _playerFellOverBinding = new EventBinding<PlayerFellOver>(OnPlayerFellOver);
             _gameResetBinding = new EventBinding<GameReset>(OnGameReset);
+            _levelIncreaseBinding = new EventBinding<LevelIncreaseEvent>(OnLevelIncrease);
             EventBus<SceneReady>.Register(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Register(_playerFellOverBinding);
             EventBus<GameReset>.Register(_gameResetBinding);
+            EventBus<LevelIncreaseEvent>.Register(_levelIncreaseBinding);
             anchor.Provide(this);
         }
 
@@ -112,6 +111,7 @@ namespace QWOPCycle.Gameplay {
             EventBus<SceneReady>.Deregister(_sceneReadyBinding);
             EventBus<PlayerFellOver>.Deregister(_playerFellOverBinding);
             EventBus<GameReset>.Deregister(_gameResetBinding);
+            EventBus<LevelIncreaseEvent>.Deregister(_levelIncreaseBinding);
         }
 
         private void OnSceneReady(SceneReady e) {
@@ -135,6 +135,10 @@ namespace QWOPCycle.Gameplay {
                     RunTime = _scoreTracker.RunTime,
                 }
             );
+        }
+
+        private void OnLevelIncrease() {
+            laneObstacleSpawnChance += 0.025f;
         }
 
         /// <summary>

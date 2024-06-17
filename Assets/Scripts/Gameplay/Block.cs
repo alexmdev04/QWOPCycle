@@ -9,7 +9,7 @@ namespace QWOPCycle.Gameplay {
         public Obstacle obstaclePrefab;
         public GameManagerAnchor gameManagerAnchor;
         public List<Obstacle> obstacles;
-        public double laneObstacleSpawnChance = 0.2f; // max value is 1
+        //public double laneObstacleSpawnChance = 0.2f; // max value is 1
         public float obstacleCenterDistanceVariance = 0.2f; // max value is 0.5,
         public int emptyLanes = 1;
 
@@ -40,7 +40,7 @@ namespace QWOPCycle.Gameplay {
                 if (lanesWithObstacles >= gameManagerAnchor.Value.blockLanes - emptyLanes)
                     break; // max filled lanes reached
                 double laneObstacleSpawnValue = random0to1;
-                if (laneObstacleSpawnValue > laneObstacleSpawnChance) continue;
+                if (laneObstacleSpawnValue > gameManagerAnchor.Value.laneObstacleSpawnChance) continue;
                 newObstacles.Add(
                     SpawnObstacle(
                         i,
@@ -62,7 +62,7 @@ namespace QWOPCycle.Gameplay {
             Obstacle newObstacle = Instantiate(obstaclePrefab);
             newObstacle.transform.position = new Vector3(
                 xPos,
-                newObstacle.transform.localScale.y,
+                newObstacle.transform.localScale.y - 0.25f,
                 zPos
             );
             newObstacle.transform.parent = transform;
