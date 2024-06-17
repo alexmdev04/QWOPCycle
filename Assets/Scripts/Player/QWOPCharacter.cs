@@ -66,6 +66,7 @@ namespace QWOPCycle.Gameplay {
         private void OnGameReset(GameReset e) {
             transform.position = Vector3.up * 0.5f;
             transform.rotation = Quaternion.identity;
+            RigidBody.velocity = Vector3.zero;
         }
 
 #endregion
@@ -99,20 +100,25 @@ namespace QWOPCycle.Gameplay {
             inputReader.PedalLeftEvent -= ControllerPedalLeft;
             inputReader.PedalRightEvent -= ControllerPedalRight;
         }
+
         private void ControllerBalanceLeft() {
             BalanceComponent.BalanceLeft();
             CharacterSfxComponent.PlayBalanceSfx();
         }
+
         private void ControllerBalanceRight() {
             BalanceComponent.BalanceRight();
             CharacterSfxComponent.PlayBalanceSfx();
         }
+
         private void ControllerPedalLeft() {
             CharacterSfxComponent.PlayPedalSfx();
         }
+
         private void ControllerPedalRight() {
             CharacterSfxComponent.PlayPedalSfx();
         }
+
 #endregion
     }
 }
