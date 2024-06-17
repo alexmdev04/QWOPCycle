@@ -102,7 +102,8 @@ namespace QWOPCycle.Gameplay {
             || _character.RigidBody.transform.position.x
             <= -_character.gameManagerAnchor.Value.BlockWidth / 2 - _character.bikeWidth
             || _character.RigidBody.transform.position.x
-            >= _character.gameManagerAnchor.Value.BlockWidth / 2 + _character.bikeWidth;
+            >= _character.gameManagerAnchor.Value.BlockWidth / 2 + _character.bikeWidth
+            || _character.RigidBody.position.z <= -1f;
 
         private float AbsoluteTiltAngle =>
             Math.Abs(Vector3.Angle(Vector3.up, transform.up)); //provides absolute angle only.
