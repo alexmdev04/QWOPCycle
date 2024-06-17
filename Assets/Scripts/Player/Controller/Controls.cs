@@ -28,18 +28,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""id"": ""1e3f7c85-8401-4ccb-84c9-7c6c3dcb75e6"",
             ""actions"": [
                 {
-                    ""name"": ""BalanceRight"",
+                    ""name"": ""BalanceLeft"",
                     ""type"": ""Button"",
-                    ""id"": ""bbc048dc-822c-462b-bfbb-bab3f815f013"",
+                    ""id"": ""318f8eed-fc7f-4120-abdd-0f8f192f8022"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""BalanceLeft"",
+                    ""name"": ""BalanceRight"",
                     ""type"": ""Button"",
-                    ""id"": ""318f8eed-fc7f-4120-abdd-0f8f192f8022"",
+                    ""id"": ""bbc048dc-822c-462b-bfbb-bab3f815f013"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -67,28 +67,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""8da2fc3f-85ef-4bf2-ba71-5773d5a46c3c"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BalanceRight"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""445060a8-c4a6-4676-8908-7ea3b5a49872"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BalanceRight"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""c46176ea-01df-4863-89e5-a8f777f73816"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
@@ -102,6 +80,39 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""1cb5ddda-6a07-4503-b52f-a121101939ec"",
                     ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f142bb17-0c11-4221-9a82-170cb9a27693"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fc68876-4636-477f-a9f3-5f4da6756897"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a6a75a3-f6d0-4643-ac19-34daed5af820"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -133,6 +144,72 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""82231a40-f233-4046-9541-3d5c9f1241c0"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1478f408-5167-429c-a3cf-437a3a8d36ea"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf13cded-1687-42e3-9e91-a2877c7c953f"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a9d25a49-26d9-4b1b-bdba-d4fb6c5e700d"",
+                    ""path"": ""<Gamepad>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9dd52c5f-be96-4682-bdb0-9cf6a6cee768"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6438e8e-33ed-4a8a-96b9-0b83b89fd38a"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""a922f659-9498-4fab-904c-60f4ee1e43e8"",
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
@@ -152,6 +229,127 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""PedalRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3ab51d6-27ae-4dc9-afc0-8216e0abd85f"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""02fa1dc4-1208-4821-9b4e-7c6db2a4b613"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8dac94b9-14b1-46b8-830f-591d6f71c0aa"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0e964e5-a5f3-4ae3-9b56-e2edacdcaa5d"",
+                    ""path"": ""<Gamepad>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58d0a8f6-b690-4c35-8fcb-b2c5aafddffe"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eccc8309-eb15-4060-ab46-77710644eb27"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8da2fc3f-85ef-4bf2-ba71-5773d5a46c3c"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""445060a8-c4a6-4676-8908-7ea3b5a49872"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6b6f3ef-5591-462a-b1ff-61ba9fd52a36"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebac6582-f215-4c05-8a0a-8a4e281f1a39"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ab40f66-65e5-42ec-9fc3-06f80d10448a"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BalanceRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -160,8 +358,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 }");
         // Play
         m_Play = asset.FindActionMap("Play", throwIfNotFound: true);
-        m_Play_BalanceRight = m_Play.FindAction("BalanceRight", throwIfNotFound: true);
         m_Play_BalanceLeft = m_Play.FindAction("BalanceLeft", throwIfNotFound: true);
+        m_Play_BalanceRight = m_Play.FindAction("BalanceRight", throwIfNotFound: true);
         m_Play_PedalLeft = m_Play.FindAction("PedalLeft", throwIfNotFound: true);
         m_Play_PedalRight = m_Play.FindAction("PedalRight", throwIfNotFound: true);
     }
@@ -225,16 +423,16 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     // Play
     private readonly InputActionMap m_Play;
     private List<IPlayActions> m_PlayActionsCallbackInterfaces = new List<IPlayActions>();
-    private readonly InputAction m_Play_BalanceRight;
     private readonly InputAction m_Play_BalanceLeft;
+    private readonly InputAction m_Play_BalanceRight;
     private readonly InputAction m_Play_PedalLeft;
     private readonly InputAction m_Play_PedalRight;
     public struct PlayActions
     {
         private @Controls m_Wrapper;
         public PlayActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @BalanceRight => m_Wrapper.m_Play_BalanceRight;
         public InputAction @BalanceLeft => m_Wrapper.m_Play_BalanceLeft;
+        public InputAction @BalanceRight => m_Wrapper.m_Play_BalanceRight;
         public InputAction @PedalLeft => m_Wrapper.m_Play_PedalLeft;
         public InputAction @PedalRight => m_Wrapper.m_Play_PedalRight;
         public InputActionMap Get() { return m_Wrapper.m_Play; }
@@ -246,12 +444,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayActionsCallbackInterfaces.Add(instance);
-            @BalanceRight.started += instance.OnBalanceRight;
-            @BalanceRight.performed += instance.OnBalanceRight;
-            @BalanceRight.canceled += instance.OnBalanceRight;
             @BalanceLeft.started += instance.OnBalanceLeft;
             @BalanceLeft.performed += instance.OnBalanceLeft;
             @BalanceLeft.canceled += instance.OnBalanceLeft;
+            @BalanceRight.started += instance.OnBalanceRight;
+            @BalanceRight.performed += instance.OnBalanceRight;
+            @BalanceRight.canceled += instance.OnBalanceRight;
             @PedalLeft.started += instance.OnPedalLeft;
             @PedalLeft.performed += instance.OnPedalLeft;
             @PedalLeft.canceled += instance.OnPedalLeft;
@@ -262,12 +460,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IPlayActions instance)
         {
-            @BalanceRight.started -= instance.OnBalanceRight;
-            @BalanceRight.performed -= instance.OnBalanceRight;
-            @BalanceRight.canceled -= instance.OnBalanceRight;
             @BalanceLeft.started -= instance.OnBalanceLeft;
             @BalanceLeft.performed -= instance.OnBalanceLeft;
             @BalanceLeft.canceled -= instance.OnBalanceLeft;
+            @BalanceRight.started -= instance.OnBalanceRight;
+            @BalanceRight.performed -= instance.OnBalanceRight;
+            @BalanceRight.canceled -= instance.OnBalanceRight;
             @PedalLeft.started -= instance.OnPedalLeft;
             @PedalLeft.performed -= instance.OnPedalLeft;
             @PedalLeft.canceled -= instance.OnPedalLeft;
@@ -293,8 +491,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     public PlayActions @Play => new PlayActions(this);
     public interface IPlayActions
     {
-        void OnBalanceRight(InputAction.CallbackContext context);
         void OnBalanceLeft(InputAction.CallbackContext context);
+        void OnBalanceRight(InputAction.CallbackContext context);
         void OnPedalLeft(InputAction.CallbackContext context);
         void OnPedalRight(InputAction.CallbackContext context);
     }
