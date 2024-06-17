@@ -35,7 +35,7 @@ namespace QWOPCycle.Gameplay {
         public int blockLanes = 4;
 
         [SerializeField] [Tooltip("In meters per second")]
-        private float minTrackSpeed = 1f;
+        private float minTrackSpeed = 0f;
 
         [SerializeField] [Tooltip("In meters per second")]
         private float maxSpeedBonus = 5f;
