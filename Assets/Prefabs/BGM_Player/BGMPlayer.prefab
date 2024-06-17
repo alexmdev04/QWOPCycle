@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameMusicSource: {fileID: 918127991615927216}
   gameMusic: {fileID: 8300000, guid: 1e50fd5702dd67d4a9d613aa45c3d2cc, type: 3}
-  pitchTickRate: 64
+  pitchTickRate: 256
 --- !u!82 &918127991615927216
 AudioSource:
   m_ObjectHideFlags: 0
