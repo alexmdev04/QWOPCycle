@@ -28,7 +28,7 @@ namespace QWOPCycle.Interface {
             _exitButton.clicked += ExitButtonPressed;
 
 #if UNITY_WEBGL
-            _optionsButton.style.display = DisplayStyle.None;
+            _settingsButton.style.display = DisplayStyle.None;
             _exitButton.style.display = DisplayStyle.None;
 #endif
         }
