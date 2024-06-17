@@ -1,4 +1,5 @@
 using Assets.PlayerScripts;
+using QWOPCycle.Scoring;
 using SideFX.Anchors;
 using SideFX.Events;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace QWOPCycle.Gameplay {
 
         [Header("Controller / Input Reader")] public InputReader inputReader;
         [Header("Game Manager")] public GameManagerAnchor gameManagerAnchor;
+        [Header("Animator")] public Animator playerAnimator;
+        [Header("Pedal Tracker")] public PedalTracker pedalTracker;
         public Rigidbody RigidBody { get; private set; }
         public BalanceComponent BalanceComponent { get; private set; }
         public SteerComponent SteerComponent { get; private set; }
@@ -46,10 +49,13 @@ namespace QWOPCycle.Gameplay {
         }
 
         private void Update() {
+            playerAnimator.speed = pedalTracker.PedalPower / 2f;
+#if UNITY_EDITOR
             if (Keyboard.current.fKey.wasPressedThisFrame) {
                 SteerComponent.DebugFreeze();
                 RigidBody.constraints = RigidbodyConstraints.FreezeAll;
             }
+#endif
         }
 
         private void OnGameStart(GameStart e) {
