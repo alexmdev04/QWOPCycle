@@ -34,3 +34,17 @@
     border-top-color: rgb(36, 131, 123);
     border-bottom-color: rgb(36, 131, 123);
 }
+
+.title-text {
+    font-size: 48px;
+    -unity-text-align: middle-center;
+    color: rgb(206, 205, 195);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
