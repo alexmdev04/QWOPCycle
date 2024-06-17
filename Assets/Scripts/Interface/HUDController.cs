@@ -3,6 +3,7 @@ using QWOPCycle.Gameplay;
 using QWOPCycle.Persistence;
 using QWOPCycle.Scoring;
 using SideFX.Events;
+using SideFX.SceneManagement.Events;
 using Unity.Logging;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -24,8 +25,11 @@ namespace QWOPCycle.Interface {
         private bool _warningLerpUp;
         private float _levelIncreaseLabelTimer;
         private ProgressBar _pedalPowerBar;
+        private bool _gameOver;
 
         private EventBinding<LevelIncreaseEvent> _levelIncreaseBinding;
+        private EventBinding<GameOver> _gameOverBinding;
+        private EventBinding<GameReset> _gameResetBinding;
 
         [SerializeField] private ScoreTracker _scoreTracker;
         [SerializeField] private PedalTracker _pedalTracker;
@@ -63,6 +67,13 @@ namespace QWOPCycle.Interface {
         private void OnEnable() {
             _levelIncreaseBinding = new EventBinding<LevelIncreaseEvent>(OnLevelIncrease);
             EventBus<LevelIncreaseEvent>.Register(_levelIncreaseBinding);
+
+            _gameOverBinding = new EventBinding<GameOver>(OnGameOver);
+            EventBus<GameOver>.Register(_gameOverBinding);
+
+            _gameResetBinding = new EventBinding<GameReset>(OnGameReset);
+            EventBus<GameReset>.Register(_gameResetBinding);
+
             _tutorialButton = _doc.rootVisualElement.Q<Button>("tutorial-button");
             _tutorialPanel = _doc.rootVisualElement.Q<Button>("tutorial-panel");
             _tutorialButton.clicked += ToggleTutorialPanel;
@@ -71,6 +82,8 @@ namespace QWOPCycle.Interface {
 
         private void OnDisable() {
             EventBus<LevelIncreaseEvent>.Deregister(_levelIncreaseBinding);
+            EventBus<GameOver>.Deregister(_gameOverBinding);
+            EventBus<GameReset>.Deregister(_gameResetBinding);
             _tutorialButton.clicked -= ToggleTutorialPanel;
             _tutorialPanel.clicked -= ToggleTutorialPanel;
         }
@@ -96,7 +109,7 @@ namespace QWOPCycle.Interface {
         private void WarningLabelTick() {
             // check if warning label should be visible
             _warningLabel.visible =
-                _pedalTracker.PedalPower < warningVisiblePercent * _pedalTracker.MaxPedalPower;
+                _pedalTracker.PedalPower < warningVisiblePercent * _pedalTracker.MaxPedalPower && !_gameOver;
             if (!_warningLabel.visible) return;
 
             // animate color
@@ -125,6 +138,14 @@ namespace QWOPCycle.Interface {
         private void OnLevelIncrease(LevelIncreaseEvent e) {
             _levelIncreaseLabel.text = $"Level {e.Level.ToString()}";
             _levelIncreaseLabelTimer = 3f;
+        }
+
+        private void OnGameOver() {
+            _gameOver = true;
+        }
+
+        private void OnGameReset() {
+            _gameOver = false;
         }
     }
 }
