@@ -12,7 +12,7 @@ namespace QWOPCycle.Interface {
 
         private UIDocument _doc;
         private Button _startButton;
-        private Button _optionsButton;
+        private Button _settingsButton;
         private Button _exitButton;
 
         private void Awake() {
@@ -21,10 +21,10 @@ namespace QWOPCycle.Interface {
 
         private void OnEnable() {
             _startButton = _doc.rootVisualElement.Q<Button>("start-game");
-            _optionsButton = _doc.rootVisualElement.Q<Button>("options");
+            _settingsButton = _doc.rootVisualElement.Q<Button>("options");
             _exitButton = _doc.rootVisualElement.Q<Button>("exit");
             _startButton.clicked += StartButtonPressed;
-            _optionsButton.clicked += OptionsButtonPressed;
+            _settingsButton.clicked += SettingsButtonPressed;
             _exitButton.clicked += ExitButtonPressed;
 
 #if UNITY_WEBGL
@@ -38,8 +38,8 @@ namespace QWOPCycle.Interface {
             EventBus<LoadRequest>.Raise(new LoadRequest(_gameplayScene));
         }
 
-        private void OptionsButtonPressed() {
-            Debug.Log("MainMenuController : Opening options menu!");
+        private void SettingsButtonPressed() {
+            Debug.Log("MainMenuController : Opening settings menu!");
         }
 
         private void ExitButtonPressed() {
