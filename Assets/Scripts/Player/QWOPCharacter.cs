@@ -18,7 +18,8 @@ namespace QWOPCycle.Gameplay {
         public SteerComponent SteerComponent { get; private set; }
         public CharacterSFXComponent CharacterSfxComponent { get; private set; }
 
-        private EventBinding<GameReset> _gameStartBinding;
+        private EventBinding<GameStart> _gameStartBinding;
+        private EventBinding<GameReset> _gameResetBinding;
 
 #endregion
 
@@ -51,11 +52,14 @@ namespace QWOPCycle.Gameplay {
             }
         }
 
+        private void OnGameStart(GameStart e) {
+            BalanceComponent.CanMove = true;
+            CharacterSfxComponent.CanPlaySfx = true;
+        }
+
         private void OnGameReset(GameReset e) {
             transform.position = Vector3.up * 0.5f;
             transform.rotation = Quaternion.identity;
-            BalanceComponent.CanMove = true;
-            CharacterSfxComponent.CanPlaySfx = true;
         }
 
 #endregion
@@ -64,13 +68,16 @@ namespace QWOPCycle.Gameplay {
 
         private void OnEnable() {
             BindController();
-            _gameStartBinding = new EventBinding<GameReset>(OnGameReset);
-            EventBus<GameReset>.Register(_gameStartBinding);
+            _gameStartBinding = new EventBinding<GameStart>(OnGameStart);
+            _gameResetBinding = new EventBinding<GameReset>(OnGameReset);
+            EventBus<GameStart>.Register(_gameStartBinding);
+            EventBus<GameReset>.Register(_gameResetBinding);
         }
 
         private void OnDisable() {
             UnbindController();
-            EventBus<GameReset>.Deregister(_gameStartBinding);
+            EventBus<GameStart>.Deregister(_gameStartBinding);
+            EventBus<GameReset>.Deregister(_gameResetBinding);
         }
 
         private void BindController() {
